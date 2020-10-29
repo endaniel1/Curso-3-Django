@@ -1,0 +1,44 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<form action="" method="post" class="form-inline" accept-charset="utf-8">
+	{% csrf_token %}
+	<div class="col-xl-6 col-md-6 mb-4">
+		<div class="card border-left-success shadow h-100 py-2">
+			<div class="card-body">
+				<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-success text-uppercase mb-1">Nueva Categoria</div>
+					</div>
+					<div class="dropdown-divider">s &nbsp;</div>
+					<div class="row">
+						<div class="col-10">
+							<div class="form-group">
+								<label for="descripcion">Descripcion</label>
+								<input type="text" name="descripcion" maxlength="100" class="form-control" required id="descripcion" placeholder="Descripcion">
+							</div>
+						</div>
+						<div class="col-2">
+							<div class="form-group">
+								<label for="estado">Estado</label>
+								<input type="checkbox" name="estado" class="form-control" required id="estado">
+							</div>
+						</div>
+					</div>
+					<div class="dropdown-divider"> s&nbsp;</div>
+					<div class="row">
+						<div class="col">
+							<button type="submit" class="btn btn-primary"><li class="fa fa-save"></li> Guardar</button>
+							<a href="{% url 'inv:categoria_list' %}" title="Cancelar" class="btn btn-danger"><li class="fa fa-undo"></li> Cancelar</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+{% endblock %}
+
+{% block  js %}
+	
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+	<h6 class="m-0 font-weight-bold text-primary">Listado de Categoria</h6>
+	<div class="dropdown no-arrow">
+		<a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+		</a>
+		<div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+			<div class="dropdown-header">Dropdown Header:</div>
+			<a class="dropdown-item" href="{% url 'inv:categoria_create' %}">Nuevo</a>
+			<a class="dropdown-item" href="#">Another action</a>
+			<div class="dropdown-divider"></div>
+			<a class="dropdown-item" href="#">Something else here</a>
+		</div>
+	</div>
+</div>
+<div class="card-body">
+	{% if not obj %}
+		<div class="alert alert-info">
+			No ay Categorias
+		</div>
+		{% else %}
+		<table class="table table-hover table-striped">
+			<thead>
+				<tr>
+					<th>Id</th>
+
+					<th>Descripcion</th>
+
+					<th>Estado</th>
+
+					<th>F. Creado</th>
+
+					<th>F. Modificado</th>
+
+					<th class="all">Opciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for categoria in obj  %}
+					<tr>
+						<td>{{categoria.id}}</td>
+						<td>{{categoria.descripcion}}</td>
+						<td>{{categoria.estado}}</td>
+						<td>{{categoria.fc | date:"d-m-Y"}}</td>
+						<td>{{categoria.fm | date:"d-m-Y"}}</td>
+						<td>
+							<a href="#" title="Editar" class="btn btn-warning btn-circle" role="button"><li class="far fa-edit"></li></a>
+							<a href="#" title="Eliminar" class="btn btn-danger btn-circle" role="button"><li class="far fa-trash-alt"></li></a>
+						</td>
+					</tr>
+				{% endfor %}			
+			</tbody>
+		</table>
+	{% endif %}
+</div>			
+{% endblock %}
+
+{% block  js %}
+	
+{% endblock %}
