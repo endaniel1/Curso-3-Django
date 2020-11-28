@@ -16,22 +16,21 @@
 					<div class="col mr-2">
 						<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
 							{% if obj %} Editar {% else %} Nueva {% endif %} 
-							Categoria
+							Marca
 						</div>
 					</div>
 					<hr class="sidebar-divider">
 					<div class="row">
 						<div class="col-6">
 							<div class="form-group">
-								<label for="descripcion">Descripcion</label>
-								<input type="text" name="descripcion" maxlength="100" class="form-control" required id="descripcion" placeholder="Descripcion" value="{% if obj.descripcion %} {{obj.descripcion}} {% endif %}">
+								{{form.descripcion}}
 							</div>
 						</div>
 						<div class="col-6">
 							<div class="form-group">
 								<label for="estado">Estado</label>
-								<input type="checkbox" name="estado" class="form-control" id="estado" 
-								{% if obj.estado %} checked="ckecked" {% endif %} >
+								<!--<input type="checkbox" name="estado" class="form-control" id="estado" {% if obj.estado %} checked="checked" {% endif %} />-->
+								{{form.estado}}
 							</div>
 						</div>
 						
@@ -41,7 +40,7 @@
 					<div class="row text-center">
 						<div class="col">
 							<button type="submit" class="btn btn-primary"><li class="fa fa-save"></li> Guardar</button>
-							<a href="{% url 'inv:categoria_list' %}" title="Cancelar" class="btn btn-danger"><li class="fa fa-undo"></li> Cancelar</a>
+							<a href="{% url 'inv:marca_list' %}" title="Cancelar" class="btn btn-danger"><li class="fa fa-undo"></li> Cancelar</a>
 						</div>
 					</div>
 				</div>
@@ -49,6 +48,7 @@
 		</div>
 	</div>
 </form>
+
 {% endblock %}
 
 {% block  js %}

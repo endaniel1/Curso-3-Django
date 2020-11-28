@@ -1,0 +1,42 @@
+<div class="modal-dialog modal-lg" role="document">
+	<div class="modal-content">
+		{% if obj %}
+		<form method="post" role="form" class="form-inline" accept-charset="utf-8" action="{% url 'cmp:proveedor_edit' obj.pk %}">	
+		{% else %}
+		<form method="post" role="form" class="form-inline" accept-charset="utf-8" action="{% url 'cmp:proveedor_create' %}">		
+		{% endif %}
+			{% csrf_token %}
+			<div class="col-xl-12 col-md-12 mb-6">
+				{% if obj %} 
+				<div class="card border-left-warning 
+				shadow h-100 py-2">
+				{% else %}
+				<div class="card border-left-success 
+				shadow h-100 py-2">
+				{% endif %} 
+					<div class="card-body">
+						<div class="container no-gutters align-items-center">
+							<div class="col mr-2">
+								<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+									{% if obj %} Editar {% else %} Nueva {% endif %} 
+									Proveedor
+								</div>
+							</div>
+							<hr class="sidebar-divider">
+							<div class="row">						
+								{{ form.as_p }}
+							</div>
+							<hr class="sidebar-divider">
+							<div class="row text-center">
+								<div class="col">
+									<button type="submit" class="btn btn-primary"><li class="fa fa-save"></li> Guardar</button>
+									<button class="btn btn-danger" type="button" onclick="return cerrar_modal()"><li class="fa fa-undo"></li> Cancelar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

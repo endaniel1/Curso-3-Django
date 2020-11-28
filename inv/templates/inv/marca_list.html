@@ -2,14 +2,14 @@
 
 {% block content %}
 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-	<h6 class="m-0 font-weight-bold text-primary">Listado de Categoria</h6>
+	<h6 class="m-0 font-weight-bold text-primary">Listado de Marcas</h6>
 	<div class="dropdown no-arrow">
 		<a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
 		</a>
 		<div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
 			<div class="dropdown-header"></div>
-			<a class="dropdown-item" href="{% url 'inv:categoria_create' %}"><li class="fa fa-pluck"></li> Crear Nueva</a>
+			<a class="dropdown-item" href="{% url 'inv:marca_create' %}"><li class="fa fa-pluck"></li> Crear Nueva</a>
 			<a class="dropdown-item" href="#"> <li class="fa fa-trash"></li> Ver papelera</a>
 		</div>
 	</div>
@@ -17,7 +17,7 @@
 <div class="card-body">
 	{% if not obj %}
 		<div class="alert alert-info">
-			No ay Categorias
+			No ay Marcas
 		</div>
 		{% else %}
 		<table class="table table-hover table-striped" id="table">
@@ -37,23 +37,23 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for categoria in obj  %}
+				{% for marca in obj  %}
 					<tr>
-						<td>{{categoria.id}}</td>
-						<td>{{categoria.descripcion}}</td>
-						<td>{{categoria.estado | yesno:'Activo,Inactivo'}}</td>
-						<td>{{categoria.fc | date:"d-m-Y"}}</td>
-						<td>{{categoria.fm | date:"d-m-Y"}}</td>
+						<td>{{marca.id}}</td>
+						<td>{{marca.descripcion}}</td>
+						<td>{{marca.estado | yesno:'Activo,Inactivo'}}</td>
+						<td>{{marca.fc | date:"d-m-Y"}}</td>
+						<td>{{marca.fm | date:"d-m-Y"}}</td>
 						<td>
-							<a href="{% url 'inv:categoria_edit' categoria.id %}" title="Editar" class="btn btn-warning btn-circle" role="button"><li class="far fa-edit"></li></a>
-							<a href="{% url 'inv:categoria_delete' categoria.id %}" title="Eliminar" class="btn btn-danger btn-circle" role="button"><li class="far fa-trash-alt"></li></a>
+							<a href="{% url 'inv:marca_edit' marca.id %}" title="Editar" class="btn btn-warning btn-circle" role="button"><li class="far fa-edit"></li></a>
+							<a href="{% url 'inv:marca_inactivar' marca.id %}" title="Eliminar" class="btn btn-danger btn-circle" role="button"><li class="far fa-trash-alt"></li></a>
 						</td>
 					</tr>
 				{% endfor %}			
 			</tbody>
 		</table>
 	{% endif %}
-</div>			
+</div>
 {% endblock %}
 
 {% block  js %}

@@ -9,7 +9,7 @@
 		</a>
 		<div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
 			<div class="dropdown-header"></div>
-			<a class="dropdown-item" href="{% url 'inv:categoria_create' %}"><li class="fa fa-pluck"></li> Crear Nueva</a>
+			<a class="dropdown-item" href="{% url 'inv:subcategoria_create' %}"><li class="fa fa-pluck"></li> Crear Nueva</a>
 			<a class="dropdown-item" href="#"> <li class="fa fa-trash"></li> Ver papelera</a>
 		</div>
 	</div>
@@ -17,12 +17,14 @@
 <div class="card-body">
 	{% if not obj %}
 		<div class="alert alert-info">
-			No ay Categorias
+			No ay Sub-Categorias
 		</div>
 		{% else %}
 		<table class="table table-hover table-striped" id="table">
 			<thead>
 				<tr>
+					<th>Categoria</th>
+
 					<th>Id</th>
 
 					<th>Descripcion</th>
@@ -37,16 +39,18 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for categoria in obj  %}
+				{% for subcategoria in obj  %}
 					<tr>
-						<td>{{categoria.id}}</td>
-						<td>{{categoria.descripcion}}</td>
-						<td>{{categoria.estado | yesno:'Activo,Inactivo'}}</td>
-						<td>{{categoria.fc | date:"d-m-Y"}}</td>
-						<td>{{categoria.fm | date:"d-m-Y"}}</td>
+						<td>{{subcategoria.categoria}}</td>
+						<td>{{subcategoria.id}}</td>
+						<td>{{subcategoria.id}}</td>
+						<td>{{subcategoria.descripcion}}</td>
+						<td>{{subcategoria.estado | yesno:'Activo,Inactivo'}}</td>
+						<td>{{subcategoria.fc | date:"d-m-Y"}}</td>
+						<td>{{subcategoria.fm | date:"d-m-Y"}}</td>
 						<td>
-							<a href="{% url 'inv:categoria_edit' categoria.id %}" title="Editar" class="btn btn-warning btn-circle" role="button"><li class="far fa-edit"></li></a>
-							<a href="{% url 'inv:categoria_delete' categoria.id %}" title="Eliminar" class="btn btn-danger btn-circle" role="button"><li class="far fa-trash-alt"></li></a>
+							<a href="{% url 'inv:subcategoria_edit' subcategoria.id %}" title="Editar" class="btn btn-warning btn-circle" role="button"><li class="far fa-edit"></li></a>
+							<a href="{% url 'inv:subcategoria_delete' subcategoria.id %}" title="Eliminar" class="btn btn-danger btn-circle" role="button"><li class="far fa-trash-alt"></li></a>
 						</td>
 					</tr>
 				{% endfor %}			

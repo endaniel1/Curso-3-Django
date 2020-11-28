@@ -1,0 +1,31 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<form action="" method="post" class="form-inline" accept-charset="utf-8">
+	{% csrf_token %}
+	<div class="col-xl-6 col-md-12 mb-8">
+		<div class="card border-left-danger shadow h-100 py-2">
+			<div class="card-body">
+				<div class="container no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Eliminar: '{{ obj.descripcion }}'</div>
+					</div>
+					<hr class="sidebar-divider">
+					<div class="row text-center">
+						<div class="col">
+							<button type="submit" class="btn btn-primary"><li class="fa fa-question-circle"></li> Si, Aceptar</button>
+							<!--
+							<a href="{% url 'inv:categoria_list' %}" title="Cancelar" class="btn btn-danger"><li class="fa fa-undo"></li> Cancelar</a>-->
+							<a href="{{ request.META.HTTP_REFERER }}" title="Cancelar" class="btn btn-danger"><li class="fa fa-undo"></li> Cancelar</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+{% endblock %}
+
+{% block  js %}
+	
+{% endblock %}

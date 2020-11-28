@@ -2,14 +2,14 @@
 
 {% block content %}
 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-	<h6 class="m-0 font-weight-bold text-primary">Listado de Categoria</h6>
+	<h6 class="m-0 font-weight-bold text-primary">Listado de Proveedores</h6>
 	<div class="dropdown no-arrow">
 		<a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
 		</a>
 		<div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
 			<div class="dropdown-header"></div>
-			<a class="dropdown-item" href="{% url 'inv:categoria_create' %}"><li class="fa fa-pluck"></li> Crear Nueva</a>
+			<a class="dropdown-item" href="#" onclick="return abrir_modal('{% url 'cmp:proveedor_create' %}')"><li class="fa fa-pluck"></li> Crear Nueva</a>
 			<a class="dropdown-item" href="#"> <li class="fa fa-trash"></li> Ver papelera</a>
 		</div>
 	</div>
@@ -17,43 +17,50 @@
 <div class="card-body">
 	{% if not obj %}
 		<div class="alert alert-info">
-			No ay Categorias
+			No ay Proveedores
 		</div>
 		{% else %}
 		<table class="table table-hover table-striped" id="table">
 			<thead>
 				<tr>
-					<th>Id</th>
+					<th>id</th>
 
-					<th>Descripcion</th>
+					<th>Descripción</th>
+
+					<th>Dirreción</th>
+
+					<th>Contacto</th>
+
+					<th>Teléfono</th>
+
+					<th>Email</th>
 
 					<th>Estado</th>
-
-					<th>F. Creado</th>
-
-					<th>F. Modificado</th>
 
 					<th class="all">Opciones</th>
 				</tr>
 			</thead>
 			<tbody>
-				{% for categoria in obj  %}
+				{% for proveedor in obj  %}
 					<tr>
-						<td>{{categoria.id}}</td>
-						<td>{{categoria.descripcion}}</td>
-						<td>{{categoria.estado | yesno:'Activo,Inactivo'}}</td>
-						<td>{{categoria.fc | date:"d-m-Y"}}</td>
-						<td>{{categoria.fm | date:"d-m-Y"}}</td>
+						<td>{{proveedor.id}}</td>
+						<td>{{proveedor.descripcion}}</td>
+						<td>{{proveedor.direccion}}</td>
+						<td>{{proveedor.contacto}}</td>
+						<td>{{proveedor.telefono}}</td>
+						<td>{{proveedor.email}}</td>
+						<td>{{proveedor.estado | yesno:'Activo,Inactivo'}}</td>
 						<td>
-							<a href="{% url 'inv:categoria_edit' categoria.id %}" title="Editar" class="btn btn-warning btn-circle" role="button"><li class="far fa-edit"></li></a>
-							<a href="{% url 'inv:categoria_delete' categoria.id %}" title="Eliminar" class="btn btn-danger btn-circle" role="button"><li class="far fa-trash-alt"></li></a>
+							<a href="#" title="Editar" class="btn btn-warning btn-circle" role="button"  onclick="return abrir_modal('{% url 'cmp:proveedor_edit' proveedor.id %}')"><li class="far fa-edit"></li></a>
+							
+							<a href="#" title="Inactivar" class="btn btn-danger btn-circle" role="button" onclick="return abrir_modal('{% url 'cmp:proveedor_inactivar' proveedor.id %}')"><li class="far fa-trash-alt"></li></a> 
 						</td>
 					</tr>
 				{% endfor %}			
 			</tbody>
 		</table>
 	{% endif %}
-</div>			
+</div>
 {% endblock %}
 
 {% block  js %}

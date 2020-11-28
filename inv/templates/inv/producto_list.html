@@ -1,0 +1,77 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+	<h6 class="m-0 font-weight-bold text-primary">Listado de Productos</h6>
+	<div class="dropdown no-arrow">
+		<a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+		</a>
+		<div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+			<div class="dropdown-header"></div>
+			<a class="dropdown-item" href="#" onclick="return abrir_modal('{% url 'inv:producto_create' %}')"><li class="fa fa-pluck"></li> Crear Nueva</a>
+			<a class="dropdown-item" href="#"> <li class="fa fa-trash"></li> Ver papelera</a>
+		</div>
+	</div>
+</div>
+<div class="card-body">
+	{% if not obj %}
+		<div class="alert alert-info">
+			No ay Productos
+		</div>
+		{% else %}
+		<table class="table table-hover table-striped" id="table">
+			<thead>
+				<tr>
+					<th>Sub - Categoria</th>
+
+					<th>Código</th>
+
+					<th>Codigo de Barra</th>
+
+					<th>Descripción</th>
+
+					<th>Existencia</th>
+
+					<th>Marca</th>
+
+					<th>Unidad Medida</th>
+
+					<th>Estado</th>
+
+					<th>F. Creado</th>
+
+					<th class="all">Opciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for producto in obj  %}
+					<tr>
+						<td>{{producto.sub_categoria}}</td>
+						<td>{{producto.codigo}}</td>
+						<td>{{producto.codigo_barra}}</td>
+						<td>{{producto.descripcion}}</td>
+						<td>{{producto.existencia}}</td>
+						<td>{{producto.marca}}</td>
+						<td>{{producto.unidad_medida}}</td>
+						<td>{{producto.estado | yesno:'Activo,Inactivo'}}</td>
+						<td>{{producto.fc | date:"d-m-Y"}}</td>
+						<td>
+							<a href="#" title="Editar" class="btn btn-warning btn-circle" role="button"  onclick="return abrir_modal('{% url 'inv:producto_edit' producto.id %}')"><li class="far fa-edit"></li></a>
+							<a href="{% url 'inv:producto_inactivar' producto.id %}" title="Eliminar" class="btn btn-danger btn-circle" role="button"><li class="far fa-trash-alt"></li></a>
+						</td>
+					</tr>
+				{% endfor %}			
+			</tbody>
+		</table>
+	{% endif %}
+</div>
+{% endblock %}
+
+{% block  js %}
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("#table").DataTable();
+});
+</script>
+{% endblock %}

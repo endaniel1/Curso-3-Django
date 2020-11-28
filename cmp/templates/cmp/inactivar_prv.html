@@ -1,0 +1,68 @@
+<div class="modal-dialog modal-lg" role="document">
+	<div class="modal-content">
+		<form action="" method="post" class="form-inline" accept-charset="utf-8">
+			{% csrf_token %}
+			<div class="col-xl-12 col-md-12 mb-12">
+				<div class="card border-left-danger shadow h-100 py-2">
+					<div class="card-body">
+						<div class="container no-gutters align-items-center">
+							<div class="col mr-2">
+								<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+									<div class="alert ">
+										Inactivar: '{{ obj.descripcion }}'
+									</div>
+								</div>
+							</div>
+							<hr class="sidebar-divider">
+							<div class="row text-center">
+								<div class="col">
+									<button type="button" id="inactivarProveedor" class="btn btn-primary"><li class="fa fa-question-circle"></li> Si, Aceptar</button>
+
+									<button class="btn btn-danger" type="button" onclick="return cerrar_modal()"><li class="fa fa-undo"></li> Cancelar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+	$(document).ready(function(e){
+
+		var token = $("input[name=csrfmiddlewaretoken]").val();
+		$.ajaxSetup({
+			beforeSend: function(xhr, settings){
+				if (!(/^http:.*/.test(settings.url) || /^http:.*/.test(settings.url))) {
+					xhr.setRequestHeader("X-CSRFToken", token)
+				}
+			}
+		});
+
+		$("#inactivarProveedor").click(function(e){
+			e.preventDefault();
+			var url = "{% url 'cmp:proveedor_inactivar' obj.id %}";
+			var data = {"id" : {{obj.id}} };
+			data = JSON.stringify(data);
+
+			$.ajax({
+				type : "POST",
+				url : url,
+				data : data,
+				beforeSend:function(xhr, settings){
+					$.ajaxSettings.beforeSend(xhr, settings);
+				},
+				success : function(response){
+					console.log(response);
+					cerrar_modal();
+					alert(response);
+				},
+				error : function(jqXHR, textStatus, errorThow){
+					console(textStatus, errorThow);
+					cerrar_modal();
+				}
+			});
+		});
+	});
+</script>	

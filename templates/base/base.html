@@ -18,6 +18,8 @@
 
   <!-- Custom styles for this template-->
   <link href="{% static 'base/css/sb-admin-2.min.css' %}" rel="stylesheet">
+    <!-- Custom styles for this page -->
+  <link href=" {% static 'base/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
   
 </head>
 
@@ -93,6 +95,9 @@
     </div>
   </div>
 
+  <div class="modal fade" id="popup">
+  </div>
+
   <!-- Bootstrap core JavaScript-->
   <script src="{% static 'base/vendor/jquery/jquery.min.js' %}"></script>
   <script src="{% static 'base/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -102,7 +107,34 @@
 
   <!-- Custom scripts for all pages-->
   <script src="{% static 'base/js/sb-admin-2.min.js' %}"></script>
+
+    <!-- Page level plugins -->
+  <script src="{% static 'base/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'base/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
   {% block js %} {% endblock %}
+
+  {% block js_modal %} 
+  <script type="text/javascript">
+    //para abrir el modal
+    function abrir_modal(url) {
+      //pedimos la url y con load() cargamos lo q nos trae la url(se hace un peticion get) y despues con una funcion cargamos el modal
+      $("#popup").load(url,function(){
+        $(this).modal({
+          backdrop:"static",
+          keyboard:false
+        }); 
+        $(this).modal("show");
+      });
+      return false;
+    }
+
+    function cerrar_modal() {
+      $("#popup").modal("hide");
+      return false;
+    }
+  </script>   
+  {% endblock %}
 </body>
 
 </html>
