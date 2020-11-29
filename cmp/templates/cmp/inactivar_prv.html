@@ -56,7 +56,11 @@
 				success : function(response){
 					console.log(response);
 					cerrar_modal();
-					alert(response);
+					if (response.startsWith("Proveedor no Existe ")) {
+						alertify.error(response);
+					}else{						
+						alertify.success(response);
+					}
 				},
 				error : function(jqXHR, textStatus, errorThow){
 					console(textStatus, errorThow);

@@ -20,6 +20,11 @@
   <link href="{% static 'base/css/sb-admin-2.min.css' %}" rel="stylesheet">
     <!-- Custom styles for this page -->
   <link href=" {% static 'base/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+
+  <link href="{% static 'base/vendor/alertify/css/themes/bootstrap.rtl.min.css' %}" rel="stylesheet" type="text/css">
+
+  <link href="{% static 'base/vendor/alertify/css/alertify.css' %}" rel="stylesheet" type="text/css">
   
 </head>
 
@@ -108,9 +113,12 @@
   <!-- Custom scripts for all pages-->
   <script src="{% static 'base/js/sb-admin-2.min.js' %}"></script>
 
-    <!-- Page level plugins -->
+  <!-- Page level plugins -->
   <script src="{% static 'base/vendor/datatables/jquery.dataTables.min.js' %}"></script>
   <script src="{% static 'base/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+  <!-- Alertify  plugins -->  
+  <script src="{% static 'base/vendor/alertify/js/alertify.min.js' %}"></script>
 
   {% block js %} {% endblock %}
 
@@ -133,6 +141,21 @@
       $("#popup").modal("hide");
       return false;
     }
+    {#para los mensajes #}
+    {% if messages %}
+      {% for message in messages %}
+      //console.log("{{message.tags}}");
+      if ("{{message.tags}}" == "success") {
+        alertify.success("{{message}}");        
+      } 
+      if ("{{message.tags}}" == "error"){
+        alertify.error("{{message}}");          
+      }
+      if ("{{message.tags}}" == "warning"){
+        alertify.warning("{{message}}");          
+      }
+      {% endfor %}      
+    {% endif %}
   </script>   
   {% endblock %}
 </body>

@@ -7,6 +7,10 @@ from django.urls import reverse_lazy #Clase para manitpulacion de url
 
 from .forms import CategoriaForm, SubCategoriaForm, MarcaForm, UMForm, ProductoForm #Clase form a utilizar
 
+#Modulos para la utilizar y crear mensajes para enviarselo a las vistas desde django
+from django.contrib import messages #para los mensajes de las vistas basada en funciones
+from django.contrib.messages.views import SuccessMessageMixin #para los mensajes de vistas basada en clases
+
 """docstring for CategoriaView"""
 class CategoriaView(LoginRequiredMixin, generic.ListView):
 	model = Categoria
@@ -15,13 +19,14 @@ class CategoriaView(LoginRequiredMixin, generic.ListView):
 	login_url = "bases:login"
 
 """docstring for CategoriaCreate"""
-class CategoriaCreate(LoginRequiredMixin, generic.CreateView):
+class CategoriaCreate(SuccessMessageMixin, LoginRequiredMixin, generic.CreateView):
 	model = Categoria
 	template_name = "inv/categoria_form.html"
 	context_object_name = "obj"
 	login_url = "bases:login"
 	form_class = CategoriaForm #Aqui le indicamos a q formulario va
 	success_url = reverse_lazy("inv:categoria_list") #Y cuando sea success a q url va
+	success_message = "Categoria Creada con Existo" # Para el mixins de los mensaje(clases basada en vista)
 
 	#Reescribo el metodo de validacion
 	def form_valid(self, form):
@@ -29,13 +34,14 @@ class CategoriaCreate(LoginRequiredMixin, generic.CreateView):
 		return super().form_valid(form)
 
 """docstring for CategoriaUpdateView"""
-class CategoriaUpdateView(LoginRequiredMixin, generic.UpdateView):
+class CategoriaUpdateView(SuccessMessageMixin, LoginRequiredMixin, generic.UpdateView):
 	model = Categoria
 	template_name = "inv/categoria_form.html"
 	context_object_name = "obj"
 	login_url = "bases:login"
 	form_class = CategoriaForm #Aqui le indicamos a q formulario va
 	success_url = reverse_lazy("inv:categoria_list") #Y cuando sea success a q url va
+	success_message = "Categoria Actualizada con Existo" # Para el mixins de los mensaje(clases basada en vista)
 
 	#Reescribo el metodo de validacion
 	def form_valid(self, form):
@@ -143,6 +149,7 @@ def marca_inactivar(request, id):
 	elif request.method == "POST":
 		marca.estado =  False
 		marca.save()
+		messages.warning(request, "Marca Inactivada")
 		return redirect("inv:marca_list")
 
 	return render(request,template_name,contexto)

@@ -74,3 +74,27 @@
 {% block footer %}
 	
 {% endblock %}
+
+{% block js %} 
+<script type="text/javascript">
+{% if form.errors %}
+  {% for field in form %}
+    {% if field.errors %}
+      {% for error in field.errors %}
+        alertify.alert('{{ error|escape }}', function(){
+          alertify.warning('Errores Encontrados');
+        });
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+
+  {% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+      alertify.alert('{{ error|escape }}', function(){
+        alertify.warning('Errores Encontrados');
+      });
+    {% endfor %}  
+  {% endif %}
+{% endif %}
+</script>
+{% endblock %}
