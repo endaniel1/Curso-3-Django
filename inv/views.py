@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.mixins import LoginRequiredMixin #Aqui importamos un mixis
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin #Aqui importamos un mixis
 from django.views import generic #Para la manipulacion de diferentes tipos de vistas
 from .models import Categoria, SubCategoria, Marca, UnidadMedida, Producto
 
@@ -11,8 +11,11 @@ from .forms import CategoriaForm, SubCategoriaForm, MarcaForm, UMForm, ProductoF
 from django.contrib import messages #para los mensajes de las vistas basada en funciones
 from django.contrib.messages.views import SuccessMessageMixin #para los mensajes de vistas basada en clases
 
+from bases.views import SinPrivilegios
+
 """docstring for CategoriaView"""
-class CategoriaView(LoginRequiredMixin, generic.ListView):
+class CategoriaView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
+	permission_required = "inv.view_categoria"
 	model = Categoria
 	template_name = "inv/categoria_list.html"
 	context_object_name = "obj"
@@ -41,7 +44,7 @@ class CategoriaUpdateView(SuccessMessageMixin, LoginRequiredMixin, generic.Updat
 	login_url = "bases:login"
 	form_class = CategoriaForm #Aqui le indicamos a q formulario va
 	success_url = reverse_lazy("inv:categoria_list") #Y cuando sea success a q url va
-	success_message = "Categoria Actualizada con Existo" # Para el mixins de los mensaje(clases basada en vista)
+	success_message = "Categoria Actualizada" # Para el mixins de los mensaje(clases basada en vista)
 
 	#Reescribo el metodo de validacion
 	def form_valid(self, form):
@@ -57,14 +60,16 @@ class CategoriaDeleteView(LoginRequiredMixin, generic.DeleteView):
 	success_url = reverse_lazy("inv:categoria_list")
 
 """docstring for SubCategoriaView"""
-class SubCategoriaView(LoginRequiredMixin, generic.ListView):
+class SubCategoriaView(LoginRequiredMixin, SinPrivilegios, generic.ListView):
+	permission_required = "inv.view_subcategoria"
 	model = SubCategoria
 	template_name = "inv/subcategoria_list.html"
 	context_object_name = "obj"
 	login_url = "bases:login"
 
 """docstring for SubCategoriaCreate"""
-class SubCategoriaCreate(LoginRequiredMixin, generic.CreateView):
+class SubCategoriaCreate(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
+	permission_required = "inv.view_subcategoria"
 	model = SubCategoria
 	template_name = "inv/subcategoria_form.html"
 	context_object_name = "obj"
@@ -100,7 +105,8 @@ class SubCategoriaDeleteView(LoginRequiredMixin, generic.DeleteView):
 	success_url = reverse_lazy("inv:subcategoria_list")
 
 """docstring for MarcaView"""
-class MarcaView(LoginRequiredMixin, generic.ListView):
+class MarcaView(LoginRequiredMixin, SinPrivilegios, generic.ListView):
+	permission_required = "inv.view_marca" #este metodo aqui q colocarlo porque lo tiene heredado de la class SinPrivilegios
 	model = Marca
 	template_name = "inv/marcas_list.html"
 	context_object_name = "obj"
