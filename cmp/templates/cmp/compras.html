@@ -1,0 +1,270 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+	<form method="post" accept-charset="utf-8" id="form_compras">
+		{% csrf_token %}
+		{% if compraEnc %}
+		<div class="card border-left-warning shadow h-100 py-2">
+		{% else %}
+		<div class="card border-left-success shadow h-100 py-2">	
+		{% endif %}	
+			<div class="card-body">
+				<div class="row no-getters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+							{% if compraEnc %} Editar {% else %} Nueva {% endif %}
+							Compra
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-6">
+								<div class="form-group row">
+									<label for="" class="col-sm-2 col-form-label">Proveedor:</label>
+									<div class="col-sm-10">
+										{{ form_compras.proveedor }}
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-6">
+										<div class="form-group">
+											<label for="fecha_compra">Fecha Compra:</label>
+											<div class="fecha_compra">		
+												
+												{# <input type="date" name="fecha_compra" class="form-control" id="fecha_compra">#}{{ form_compras.fecha_compra }} 
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="fecha_compra">Descripción:</label>
+											{{ form_compras.observacion }}
+										</div>
+									</div>
+									<div class="col-6">
+										<div class="form-group">
+											<label for="">Nro. Factura:</label>
+											{{ form_compras.no_factura }}
+										</div>
+										<div class="form-group">
+											<label for="">Fecha Factura:</label>
+											<div class="fecha_factura">
+												
+												{# <input type="date" name="fecha_factura" class="form-control" id="fecha_factura">#}{{ form_compras.fecha_factura }}	
+											</div>
+										</div>
+										<div class="row">
+											<div class="col">
+												<label for="sub_total">Sub Total</label>
+												{{ form_compras.sub_total }}
+											</div>
+										</div>
+										<div class="row">
+											<div class="col">
+												<label for="descuento">Descuento</label>
+												{{ form_compras.descuento }}
+											</div>
+										</div>
+										<div class="row">
+											<div class="col">
+												<label for="total">Total</label>
+												{{ form_compras.total }}
+											</div>
+										</div>
+									</div>
+								</div>		
+							</div>
+
+							<div class="col-6">
+								<div class="col">
+									<table class="table table-striped table-hover dt-responsive nowrap" style="width: 100%;">
+										<thead>
+											<tr>
+												<th>Id</th>
+												<th class="all">Descripción</th>
+												<th class="all">Acciones</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for producto in productos %}	
+											<tr>
+												<td>{{producto.id}}</td>
+												<td>{{producto.descripcion}}</td>
+												<td>
+													<button type="button" class="btn btn-warning btn-circle"  onclick="selectProduct({{ producto.id }} , '{{ producto.descripcion }}')">+</button>
+												</td>
+											</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+
+								<div class="form-group row">
+									<label for="id_producto" class="col-sm-3 col-form-label">Producto</label>
+									<div class="col-sm-2">
+										<input type="text" readonly name="id_producto" id="id_producto" class="form-control-plaintext" value="" required="required">
+									</div>
+									<div class="col-sm-2">
+										<input type="text" readonly name="id_descripcion_producto" id="id_descripcion_producto" class="form-control-plaintext" value="" required="required">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="id_cantidad_detalle" class="col-sm-3 col-form-label">Cant..:</label>
+									<div class="col-sm-2">
+										<input type="number" class="form-control" name="id_cantidad_detalle" id="id_cantidad_detalle" value="0" required="required">
+									</div>	
+									<label for="id_precio_detalle" class="col-sm-3 col-form-label">Precio</label>
+									<div class="col-sm-2">
+										<input type="number" class="form-control" name="id_precio_detalle" id="id_precio_detalle" value="0" required="required">
+									</div>	
+									<label for="id_descuento_detalle" class="col-sm-3 col-form-label">Desc..:</label>
+									<div class="col-sm-2">
+										<input type="text" class="form-control" name="id_descuento_detalle" id="id_descuento_detalle" value="0">
+									</div>				
+								</div>
+								<div class="form-group row">
+									<label for="id_sub_total_detalle" class="col-sm-3 col-form-label">S. Total:</label>
+									<div class="col-sm-2">
+										<input type="text" class="form-control-plaintext" name="id_sub_total_detalle" id="id_sub_total_detalle" value="0">
+									</div>	
+									<label for="id_total_detalle" class="col-sm-3 col-form-label">Total:</label>
+									<div class="col-sm-2">
+										<input type="text" class="form-control-plaintext col-sm-10" name="id_total_detalle" id="id_total_detalle" value="0">
+									</div>
+									<div class="col-sm-1">
+										<button type="button" class="btn btn-sm col-sm-2" onclick="clearDetalle();">x</button>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col">
+										<button type="submit" class="btn btn-danger"><span class="fa fa-save"></span> Guardar</button>
+										<a href="{% url 'cmp:compras_list' %}" class="btn btn-success"> Cancelar</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>			
+
+				<div class="row">
+					<div class="col">
+						<table class="table table-striped table-hover dt-responsive nowrap" style="width: 100%;">
+							<thead>
+								<tr>
+									<th>Producto</th>
+									<th>Cantidad</th>
+									<th>Precio</th>
+									<th>Sub Total</th>
+									<th>Descuento</th>
+									<th>Total</th>
+									<th class="all">Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for detalle in CompraDet %}
+								<tr>
+									<td>{{detalle.producto}}</td>
+									<td>{{detalle.cantidad}}</td>
+									<td>{{detalle.cantidad}}</td>
+									<td>{{detalle.sub_total}}</td>
+									<td>{{detalle.descuento}}</td>
+									<td>{{detalle.total}}</td>
+									<td>
+										<button type="button" class="btn btn-danger btn.circle"><span class="fas fa-trash-alt"></span></button>
+									</td>
+								</tr>								
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>						
+				</div>		
+		</div>
+	</form>
+{% endblock %}
+
+{% block  js %}
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+
+	$("#sidebarToggle").click();
+
+	$("#table").DataTable();
+
+	jQuery.datetimepicker.setLocale("es");
+
+	$("#id_fecha_compra, #id_fecha_factura").datetimepicker({
+		format: "Y-m-d",
+		timepicker: false
+	});
+
+	$("#id_cantidad_detalle, #id_precio_detalle, #id_descuento_detalle").change(function(){
+		calcularDetalle();
+	});
+
+	$("#id_proveedor").focus();
+});
+
+function selectProduct(id, description){
+	$("#id_cantidad_detalle").val(00);
+	$("#id_precio_detalle").val(00);
+	$("#id_descuento_detalle").val(00);
+
+	$("#id_sub_total_detalle").val(00);
+	$("#id_total_detalle").val(00);
+
+	$("#id_producto").val(+id);
+	$("#id_descripcion_producto").val(description);
+	$("#id_cantidad_detalle").focus();
+	$("#id_cantidad_detalle").select();
+
+	$(".table").DataTable().search("").draw();	
+}
+
+function calcularDetalle() {
+	var cantidad, precio, descuento, subTotal, total;
+	//calculamos y validamos la cantidad
+	cantidad = $("#id_cantidad_detalle").val();
+	cantidad = cantidad === "" ? 0 : +cantidad;
+	cantidad = cantidad < 0 ? 0 : cantidad;
+
+	//calculamos y validamos el precio
+	precio = $("#id_precio_detalle").val();
+	precio = precio === "" ? 0 : +precio;
+	precio = precio < 0 ? 0 : precio;
+
+	//calculamos y validamos el descuento
+	descuento = $("#id_descuento_detalle").val();
+	descuento = descuento === "" ? 0 : +descuento;
+	descuento = descuento < 0 ? 0 : descuento;
+
+	//validamos si el descuento mayor q la cantidad por el precio  
+	descuento = descuento > (cantidad * precio) ? 0 : descuento;
+
+	//asignamos el subTotal y el total a las variables
+	subTotal = cantidad * precio;
+	total = subTotal - descuento;
+
+	//Agregamos los valores a los inputs
+	$("#id_cantidad_detalle").val(cantidad);
+	$("#id_precio_detalle").val(precio);
+	$("#id_descuento_detalle").val(descuento);
+
+	$("#id_sub_total_detalle").val(subTotal);
+	$("#id_total_detalle").val(total);
+}
+
+function clearDetalle(){
+	$("#id_cantidad_detalle").val(00);
+	$("#id_precio_detalle").val(00);
+	$("#id_descuento_detalle").val(00);
+
+	$("#id_sub_total_detalle").val(00);
+	$("#id_total_detalle").val(00);
+
+	$("#id_producto").val("");
+	$("#id_descripcion_producto").val("");
+
+	$(".table").DataTable().search("").draw();	
+
+	$("#id_proveedor").focus();
+}
+</script>
+{% endblock %}

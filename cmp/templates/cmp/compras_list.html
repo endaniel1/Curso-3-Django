@@ -1,0 +1,77 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+	<h6 class="m-0 font-weight-bold text-primary">Listado de Compras</h6>
+	<div class="dropdown no-arrow">
+		<a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+		</a>
+		<div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+			<div class="dropdown-header"></div>
+			<a class="dropdown-item" href="{% url 'cmp:compras_create' %}" title="Nueva"><li class="fa fa-pluck"></li> Crear Nueva</a>
+			<a class="dropdown-item" href="#"> <li class="fa fa-trash"></li> Ver papelera</a>
+		</div>
+	</div>
+</div>
+<div class="card-body">
+	{% if not obj %}
+		<div class="alert alert-info">
+			No ay Compras
+		</div>
+		{% else %}
+		<table class="table table-hover table-striped" id="table">
+			<thead>
+				<tr>
+					<th>id</th>
+
+					<th>fecha</th>
+
+					<th>Observación</th>
+
+					<th>Nro. Factura</th>
+
+					<th>Fecha Facturada</th>
+
+					<th>Sub - Total</th>
+
+					<th>Descuesto</th>
+
+					<th>Total</th>
+
+					<th>Estado</th>
+
+					<th class="all">Opciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for compra in obj  %}
+					<tr>
+						<td>{{compra.id}}</td>
+						<td>{{compra.fecha_compra}}</td>
+						<td>{{compra.observacion}}</td>
+						<td>{{compra.no_factura}}</td>
+						<td>{{compra.fecha_factura}}</td>
+						<td>{{compra.sub_total}}</td>
+						<td>{{compra.descuesto}}</td>
+						<td>{{compra.total}}</td>
+						<td>{{compra.estado | yesno:'Activo,Inactivo'}}</td>
+						<td>
+							<a href="{% url 'cmp:compras_edit' compra.id %}" title="Editar" class="btn btn-warning btn-circle" role="button"><li class="far fa-edit"></li></a>
+						</td>
+					</tr>
+				{% endfor %}			
+			</tbody>
+		</table>
+	{% endif %}
+</div>
+{% endblock %}
+
+{% block  js %}
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+
+	$("#table").DataTable();
+});
+</script>
+{% endblock %}

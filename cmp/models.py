@@ -1,6 +1,9 @@
 from django.db import models
 
 from bases.models import ClassModelo
+
+from inv.models import Producto
+
 # Create your models here.
 
 """docstring for Proveedor"""
@@ -36,3 +39,50 @@ class Proveedor(ClassModelo):
 
 	class Meta:
 		verbose_name='Proveedores'
+
+"""docstring for CompraEnc"""
+class CompraEnc(ClassModelo):
+	fecha_compra = models.DateField(null = True, blank = True)
+	observacion = models.TextField(null =  True, blank = True)
+	no_factura = models.CharField(max_length = 100)
+	fecha_factura = models.DateField()
+	sub_total = models.FloatField(default = 0)
+	descuento = models.FloatField(default = 0)
+	total = models.FloatField(default = 0)
+
+	proveedor = models.ForeignKey(Proveedor, on_delete = models.CASCADE)
+
+	def __str__(self):
+		return "{}".format(self.observacion)
+
+	def save(self):
+		self.observacion = self.observacion.upper()
+		self.total = self.sub_total + self.descuento
+		super(CompraEnc, self).save()
+
+	class Meta:
+		verbose_name_plural = "Encabezado de las Compras"
+		verbose_name = "Encabezado de Compra"
+
+"""docstring for CompraDet"""
+class CompraDet(ClassModelo):
+	compra = models.ForeignKey(CompraEnc, on_delete = models.CASCADE)
+	producto = models.ForeignKey(Producto, on_delete = models.CASCADE)
+	cantidad = models.BigIntegerField(default = 0)
+	precio_prv = models.FloatField(default = 0)
+	sub_total = models.FloatField(default = 0)
+	descuento = models.FloatField(default = 0)
+	total = models.FloatField(default = 0)
+	costo = models.FloatField(default = 0)
+
+	def __str__(self):
+		return "{}".format(self.producto)
+
+	def save(self):
+		self.sub_total = float(float(int(self.cantidad)) * float(self.precio_prv))
+		self.total = self.sub_total - float(self.descuento)
+		super(CompraDet, self).save()
+
+	class Meta:
+		verbose_name_plural = "Detalles de las Compras"
+		verbose_name = "Detalle Compra"
