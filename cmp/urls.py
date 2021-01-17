@@ -1,6 +1,7 @@
 from django.urls import path, include
 
 from . import views
+from .reports import reporte_compras
 
 urlpatterns = [	
 	path("proveedores/", views.ProveedorView.as_view(), name = "proveedor_list"),
@@ -11,4 +12,7 @@ urlpatterns = [
 	path("compras/", views.ComprasView.as_view(), name = "compras_list"),
 	path("compras/create", views.CreateCompra, name = "compras_create"),
 	path("compras/edit/<int:id>", views.CreateCompra, name = "compras_edit"),
+	path("compras/<int:compra_id>/delete/<int:pk>", views.CompraDetDelete.as_view(), name = "compras_delete"),
+
+	path("compras/lists", reporte_compras, name="compras_print_all"),
 ]

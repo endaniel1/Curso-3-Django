@@ -148,8 +148,8 @@ def CreateCompra(request, id = None):
 
 			if enc:
 				enc.fecha_compra = fecha_compra
-				enc.observacion = fecha_compra
-				enc.no_factura = observacion
+				enc.observacion = observacion
+				enc.no_factura = no_factura
 				enc.fecha_factura = fecha_factura
 				enc.um = request.user.id
 				enc.save()
@@ -189,3 +189,17 @@ def CreateCompra(request, id = None):
 		return redirect("cmp:compras_edit", id = id)
 
 	return render(request, template_name, contexto)
+
+
+"""docstring for CompraDetDelete"""
+class CompraDetDelete(SinPrivilegios, generic.DeleteView):
+	permission_required = "cmp.delete_comprasdet"
+	model = CompraDet
+	template_name = "cmp/compras_det_del.html"
+	context_object_name = "obj"
+
+	def get_success_url(self):
+		compra_id = self.kwargs["compra_id"]
+		return reverse_lazy("cmp:compras_edit", kwargs = {
+			"id" : compra_id
+		})

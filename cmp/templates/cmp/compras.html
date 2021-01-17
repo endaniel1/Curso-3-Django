@@ -168,7 +168,7 @@
 									<td>{{detalle.descuento}}</td>
 									<td>{{detalle.total}}</td>
 									<td>
-										<button type="button" class="btn btn-danger btn.circle"><span class="fas fa-trash-alt"></span></button>
+										<button type="button" class="btn btn-danger btn.circle" onclick="return abrir_modal('{% url 'cmp:compras_delete' compraEnc.pk detalle.id %}');"><span class="fas fa-trash-alt"></span></button>
 									</td>
 								</tr>								
 								{% endfor %}
@@ -200,6 +200,14 @@ jQuery(document).ready(function($) {
 	});
 
 	$("#id_proveedor").focus();
+	/* Valida Envio de formulario */
+	$("#form_compras").submit(function(event) {
+		if ($("#id_total_detalle").val() == 0 || $("id_producto").val() == 0) {
+			event.preventDefault();
+			alertify.warning("No AH Agregado Producto o Esta Sin Cantidades!!");     
+		}
+	});
+	/* Fin de la Validacion de formulario */
 });
 
 function selectProduct(id, description){
