@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Listado de Compras</title>
+	
+	<style type="text/css">
+		@page{
+			size: letter;
+			margin: 1cm;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="card">
+			<div class="card-header">
+				<h4>Sistema de Compras</h4>
+			</div>
+
+			<div class="list-group">
+				<p>No. Compra {{ enc.id }}</p>
+				<table class="">
+					<tbody>
+						<tr>
+							<td>Proveedor</td>
+							<td>{{enc.proveedor}}</td>
+							<td>Fecha Compra</td>
+							<td>{{enc.fecha_compra | date:"d/m/Y"}}</td>
+						</tr>
+						<tr>
+							<td>No. Factura</td>
+							<td>{{enc.no_factura}}</td>
+							<td>Fecha Factura</td>
+							<td>{{enc.fecha_factura | date:"d/m/Y"}}</td>
+						</tr>
+						<tr>
+							<td>Observación</td>
+							<td colspan="3">{{enc.observacion}}</td>
+						</tr>
+					</tbody>
+				</table>
+				<hr>
+			</div>
+
+			<table class="table" border="0">
+				<thead>
+					<tr>
+						<th>Producto</th>
+						<th>Cantidad</th>
+						<th>Precio</th>
+						<th>Sub - Total</th>
+						<th>Descuento</th>
+						<th>Total</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in detalle %}					
+						<tr>
+							<td><span class="small">{{ item.producto }}</span></td>
+							<td align="center">{{ item.cantidad }}</td>
+							<td align="center">{{ item.precio_prv }}</td>
+							<td align="center">{{ item.sub_total }}</td>
+							<td align="center">{{ item.descuento }}</td>
+							<td align="center">{{ item.total }}</td>
+						</tr>						
+					{% endfor %}
+					<tr>
+						<td colspan="6"></td>
+					</tr>
+					<tr>
+						<td colspan="5" align="right"><b>Sub - total</b></td>
+						<td align="center">{{ enc.sub_total }}</td>
+					</tr>
+					<tr>
+						<td colspan="5" align="right"><b>Descuento</b></td>
+						<td align="center">{{ enc.descuento }}</td>
+					</tr>
+					<tr>
+						<td colspan="5" align="right"><b>Total</b></td>
+						<td align="center">{{ enc.total }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>			
+</body>
+</html>

@@ -9,7 +9,7 @@
 		</a>
 		<div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
 			<div class="dropdown-header"></div>
-			<a class="dropdown-item" href="{% url 'cmp:compras_create' %}" title="Nueva"><li class="fas fas-pluck"></li> Crear Nueva</a>
+			<a class="dropdown-item" href="{% url 'cmp:compras_create' %}" title="Nueva"><li class="fas fa-pluck"></li> Crear Nueva</a>
 			<a class="dropdown-item" href="{% url 'cmp:compras_print_all' %}" title="Listado" target="reportes"><li class="fa fa-print"></li> Listado</a>
 			<a class="dropdown-item" href="#"> <li class="fa fa-trash"></li> Ver papelera</a>
 		</div>
@@ -59,6 +59,7 @@
 						<td>{{compra.estado | yesno:'Activo,Inactivo'}}</td>
 						<td>
 							<a href="{% url 'cmp:compras_edit' compra.id %}" title="Editar" class="btn btn-warning btn-circle" role="button"><li class="far fa-edit"></li></a>
+							<a href="{% url 'cmp:compras_print_one' compra.id %}" title="Reporte" target="reportes" class="btn btn-success btn-circle" role="button"><li class="fas fa-print"></li></a>
 						</td>
 					</tr>
 				{% endfor %}			
