@@ -54,6 +54,11 @@
         {% if perms.cmp.view_proveedor %}  
         <h6 class="collapse-header">Catalogo de Compras</h6> 
         <a class="collapse-item" href="{% url 'cmp:proveedor_list' %}">Proveedores</a>   
+        {% endif %}      
+        <div class="collapse-divider"></div>
+        {% if perms.fac.view_cliente %}  
+        <h6 class="collapse-header">Catalogo de Facturación</h6> 
+        <a class="collapse-item" href="{% url 'fac:cliente_list' %}">Clientes</a>   
         {% endif %}    
       </div>
     </div>
@@ -69,6 +74,8 @@
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Entradas</h6> 
         <a class="collapse-item" href="{% url 'cmp:compras_list' %}">Compras </a>   
+        <h6 class="collapse-header">Salidas</h6> 
+        <a class="collapse-item" href="{% url 'fac:factura_list' %}">Facturas </a>   
       </div>
     </div>
   </li>

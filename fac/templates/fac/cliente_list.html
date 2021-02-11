@@ -1,0 +1,155 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+	<h6 class="m-0 font-weight-bold text-primary">Listado de Clientes</h6>
+	<div class="dropdown no-arrow">
+		<a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+		</a>
+		<div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+			<div class="dropdown-header"></div>
+			<a class="dropdown-item" href="#"> <li class="fa fa-trash"></li> Ver papelera</a>
+		</div>
+	</div>
+</div>
+<div class="card-body">
+	{% if not obj %}
+		<div class="alert alert-info">
+			No ay Clientes
+		</div>
+		{% else %}
+		{% comment %}
+
+		<table class="table table-hover table-striped" id="table">
+			<thead>
+				<tr>
+					<th>id</th>
+
+					<th>Nombres</th>
+
+					<th>Apellidos</th>
+
+					<th>Tipo</th>
+
+					<th>Teléfono</th>
+
+					<th>Estado</th>
+
+					<th class="all">Opciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for cliente in obj  %}
+					<tr>
+						<td>{{cliente.id}}</td>
+						<td>{{cliente.nombres}}</td>
+						<td>{{cliente.apellidos}}</td>
+						<td>{{cliente.tipo}}</td>
+						<td>{{cliente.telefono}}</td>
+						<td>{{cliente.estado | yesno:'Activo,Inactivo'}}</td>
+						<td>
+							<a href="#" title="Editar" class="btn btn-warning btn-circle" role="button"  onclick="return abrir_modal('{% url 'fac:cliente_edit' cliente.id %}')"><li class="far fa-edit"></li></a>
+							{% if cliente.estado %}	
+
+								<button type="button" title="Eliminar" class="btn btn-danger btn-circle" onclick="inactivar({{ cliente.id }})"><li class="far fa-trash-alt"></li></button>
+
+							{% else %}													
+								<button type="button" title="Restaurar" class="btn btn-success btn-circle" onclick="inactivar({{ cliente.id }})"><li class="fas fa-undo"></li></button>
+
+							{% endif %}
+						</td>
+					</tr>
+				{% endfor %}			
+			</tbody>
+		</table>			
+		{% endcomment %}
+ 		<div class="buttons-toolbar"><a class="dropdown-item" href="#" onclick="return abrir_modal('{% url 'fac:cliente_create' %}')"><li class="fas fa-plus"></li> Crear Nueva</a>
+ 		</div>
+		<table 
+			data-toggle="table" 
+			data-pagination="true" 
+			data-search="true" 
+			data-show-columns="true" 
+			data-show-toggle="true" 
+			data-show-fullscreen="true"
+			data-toolbar=".buttons-toolbar"
+			>
+			<thead>
+				<tr>
+					<th data-field="id" data-sortable="true">id</th>
+
+					<th data-field="nombres" data-sortable="true">Nombres</th>
+
+					<th data-field="apellidos" data-sortable="true">Apellidos</th>
+
+					<th data-field="tipo" data-sortable="true">Tipo</th>
+
+					<th data-field="tlf">Teléfono</th>
+
+					<th data-field="estado">Estado</th>
+
+					<th>Opciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for cliente in obj  %}
+					<tr>
+						<td>{{cliente.id}}</td>
+						<td>{{cliente.nombres}}</td>
+						<td>{{cliente.apellidos}}</td>
+						<td>{{cliente.tipo}}</td>
+						<td>{{cliente.telefono}}</td>
+						<td>{{cliente.estado | yesno:'Activo,Inactivo'}}</td>
+						<td>
+							<a href="#" title="Editar" class="btn btn-warning btn-circle" role="button"  onclick="return abrir_modal('{% url 'fac:cliente_edit' cliente.id %}')"><li class="far fa-edit"></li></a>
+							{% if cliente.estado %}	
+
+								<button type="button" title="Eliminar" class="btn btn-danger btn-circle" onclick="inactivar({{ cliente.id }})"><li class="far fa-trash-alt"></li></button>
+
+							{% else %}													
+								<button type="button" title="Restaurar" class="btn btn-success btn-circle" onclick="inactivar({{ cliente.id }})"><li class="fas fa-undo"></li></button>
+
+							{% endif %}
+						</td>
+					</tr>
+				{% endfor %}			
+			</tbody>
+		</table>
+	{% endif %}
+</div>
+{% endblock %}
+
+{% block  js %}
+<script type="text/javascript">
+function inactivar(id){
+	var data = {id : id};
+	data = JSON.stringify(data);
+	var token = "{{ csrf_token }}";
+	var url = "/fac/clientes/inactivar/"+id;
+
+	$.ajax({
+		headers : {"X-CSRFToken": token},
+		type : "POST",
+		url : url,
+		data : data,
+		success : function(resp){
+			if (resp === "OK") {			
+				location.reload(true);	
+			} else{
+				alertify.error(resp);
+			}
+		},
+		error: function(jqXHR, textStatus, errorThow){
+			console.log(textStatus, errorThow);
+			cerrar_modal();
+		}
+	});
+}
+/*
+jQuery(document).ready(function($) {
+	$("#table").DataTable();
+});
+*/
+</script>
+{% endblock %}

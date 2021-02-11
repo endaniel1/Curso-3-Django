@@ -42,7 +42,7 @@
 
 		$("#inactivarProveedor").click(function(e){
 			e.preventDefault();
-			var url = "{% url 'cmp:proveedor_inactivar' obj.id %}";
+			var url = "{% url 'cmp:proveedor_inactivar' 100 %}";
 			var data = {"id" : {{obj.id}} };
 			data = JSON.stringify(data);
 

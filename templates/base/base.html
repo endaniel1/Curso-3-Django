@@ -21,13 +21,15 @@
     <!-- Custom styles for this page -->
   <link href=" {% static 'base/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
 
-
+  {# use alertify #}
   <link href="{% static 'base/vendor/alertify/css/themes/bootstrap.rtl.min.css' %}" rel="stylesheet" type="text/css">
-
   <link href="{% static 'base/vendor/alertify/css/alertify.css' %}" rel="stylesheet" type="text/css">
 
+  {# use datetimepicker #}
   <link href="{% static 'base/css/jquery-datetimepicker.min.css' %}" rel="stylesheet" type="text/css">
 
+  {# use bootstrap table #}
+  <link href="{% static 'base/css/bootstrap-table.min.css' %}" rel="stylesheet" type="text/css">
 </head>
 
 <body id="page-top" class="bg-gradient-primary">
@@ -121,8 +123,10 @@
 
   <!-- Alertify  plugins -->  
   <script src="{% static 'base/vendor/alertify/js/alertify.min.js' %}"></script>
-
+  <!-- Datetimepicker  plugins -->  
   <script src="{% static 'base/js/jquery-datetimepicker-full.min.js' %}"></script>
+  <!-- Bootstrap Table  plugins -->  
+  <script src="{% static 'base/js/bootstrap-table.min.js' %}"></script>
 
   {% block js %} {% endblock %}
 

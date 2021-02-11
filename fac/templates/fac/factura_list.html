@@ -1,0 +1,104 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+	<h6 class="m-0 font-weight-bold text-primary">Listado de Facturas</h6>
+	{% comment %}		
+	<div class="dropdown no-arrow">
+		<a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+		</a>
+		<div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+			<div class="dropdown-header"></div>
+			<a class="dropdown-item" href="#"> <li class="fa fa-trash"></li> Ver papelera</a>
+		</div>
+	</div>
+	{% endcomment %}
+</div>
+<div class="card-body">
+	{% if not obj %}
+		<div class="alert alert-info">
+			No ay Facturas
+		</div>
+	{% endif %}
+	<div class="buttons-toolbar">
+		<a class="btn btn-success" href="{% url 'fac:factura_create' %}" ><li class="fas fa-plus"></li> Crear Nueva</a>
+	</div>
+	<table 
+		data-toggle="table" 
+		data-pagination="true" 
+		data-search="true" 
+		data-show-columns="true" 
+		data-show-toggle="true" 
+		data-show-fullscreen="true"
+		data-toolbar=".buttons-toolbar"
+		>
+		<thead>
+			<tr>
+				<th data-field="id" data-sortable="true">No.</th>
+
+				<th data-field="clientes" data-sortable="true">Cliente</th>
+
+				<th data-field="totales" data-sortable="true">total</th>
+
+				<th data-field="estado">Estado</th>
+
+				<th class="all">Opciones</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for factura in obj  %}
+				<tr>
+					<td>{{factura.id}}</td>
+					<td>{{factura.cliente}}</td>
+					<td>{{factura.total}}</td>
+					<td>{{factura.estado | yesno:'Activo,Inactivo'}}</td>
+					<td>
+						<a href="#" title="Editar" class="btn btn-warning btn-circle" role="button"><li class="far fa-edit"></li></a>
+						{% if factura.estado %}	
+
+							<button type="button" title="Eliminar" class="btn btn-danger btn-circle"><li class="far fa-trash-alt"></li></button>
+
+						{% else %}													
+							<button type="button" title="Restaurar" class="btn btn-success btn-circle" onclick="inactivar({{ factura.id }})"><li class="fas fa-undo"></li></button>
+
+						{% endif %}
+					</td>
+				</tr>
+			{% endfor %}			
+		</tbody>
+	</table>
+</div>
+{% endblock %}
+
+{% block  js %}
+<script type="text/javascript">
+
+/*
+function inactivar(id){
+	var data = {id : id};
+	data = JSON.stringify(data);
+	var token = "{{ csrf_token }}";
+	var url = "/fac/clientes/inactivar/"+id;
+
+	$.ajax({
+		headers : {"X-CSRFToken": token},
+		type : "POST",
+		url : url,
+		data : data,
+		success : function(resp){
+			if (resp === "OK") {			
+				location.reload(true);	
+			} else{
+				alertify.error(resp);
+			}
+		},
+		error: function(jqXHR, textStatus, errorThow){
+			console.log(textStatus, errorThow);
+			cerrar_modal();
+		}
+	});
+}
+*/
+</script>
+{% endblock %}
