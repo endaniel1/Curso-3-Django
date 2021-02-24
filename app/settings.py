@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     "inv",
     "cmp",
     "fac",
+    "api",
     "django_userforeignkey",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -55,7 +57,7 @@ MIDDLEWARE = [
     "django_userforeignkey.middleware.UserForeignKeyMiddleware",
 ]
 
-ROOT_URLCONF = 'app.urls'
+ROOT_URLCONF = 'app.urls' #Carpeta de donde estan la configuracion del manego de rutas
 
 TEMPLATES = [
     {

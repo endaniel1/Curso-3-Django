@@ -6,11 +6,13 @@ from django.contrib.messages.views import SuccessMessageMixin # Para el mensaje 
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
+from datetime import datetime
 
 from bases.views import SinPrivilegios
 
 from .models import Cliente, FacturaEnc, FacturaDet
 from .forms import ClienteForm
+from inv.views import ProductoView
 
 # Create your views here.
 
@@ -83,5 +85,18 @@ class FacturaView(SinPrivilegios, generic.ListView):
 @permission_required("fac.change_facturaenc", login_url = "bases:sin_privilegios")
 def facturas(request, id=None):
 	template_name = "fac/facturas.html"
-	contexto = {}
+	encabezado = {
+		"fecha" : datetime.today()
+	}
+	detalle = {}
+	clientes = Cliente.objects.filter(estado = True)
+	contexto = {
+		"enc" : encabezado,
+		"det" : detalle,
+		"clientes" : clientes
+	}
 	return render(request, template_name, contexto)
+
+
+class FacProductoView(ProductoView):
+	template_name = "fac/buscar_producto.html"

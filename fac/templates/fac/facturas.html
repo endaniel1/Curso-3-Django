@@ -14,18 +14,145 @@
 			<div class="row">
 				<!-- Seccion Izquierda -->
 				<div class="col-lg-6">
-					Sección Izquierda
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="row">
+								<div class="col-lg-1">
+									No.
+								</div>
+								<div class="col-lg-4">
+									<input type="text" name="enc_id" id="enc_id" readonly="readonly" class="form-control">
+								</div>
+								<div class="col-lg-2">
+									Cliente
+								</div>
+								<div class="col-lg-5 form-group">
+									<select name="enc_cliente" id="enc_cliente" class="form-control">
+										<option value="0"> Selecione Cliente</option>
+										{% for cliente in clientes %}
+											<option value="{{ cliente.id }}">{{ cliente.nombres }} {{ cliente.apellidos }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-lg-12 p-2">
+									<div class="row">
+										<div class="col-lg-6">
+											fecha:
+										</div>	
+										<div class="col-lg-6">	
+											Sub - Total:
+										</div>	
+									</div>
+									<div class="row">
+										<div class="col-lg-6">
+											<input type="text" name="fecha" id="fecha" value="{{ enc.fecha | date:"Y-m-d" }}" readonly="readonly" class="form-control form-control-user">
+										</div>	
+										<div class="col-lg-6">	
+											<input type="number" class="form-control text-right" value="0.00" readonly="readonly" name="sub_total" id="sub_total">
+										</div>	
+									</div>
+									<div class="row">
+										<div class="col-lg-12 text-right">
+											Descuento:
+										</div>
+										<div class="col-lg-6 text-right">
+										</div>
+										<div class="col-lg-6 text-right">
+											<input type="number" name="descuento" id="descuento" disabled="disabled" value="0.00" class="form-control text-right">
+										</div>
+										<div class="col-lg-12 text-right">
+											Total:
+										</div>
+										<div class="col-lg-6 text-right">
+										</div>
+										<div class="col-lg-6 text-right">
+											<input type="number" name="total" id="total" disabled="disabled" value="0.00" class="form-control text-right">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>		
 				</div>
 				<!-- Seccion Derecha -->
-				<div class="col-lg-6">
-					Sección Derecha
+				<div class="col-lg-6 form-group">
+					<div class="row p-2">
+						<div class="col-lg-2">
+							Cod:
+						</div>
+						<div class="col-lg-3">
+							<input type="text" class="form-control" name="codigo" id="codigo" placeholder="Cod. Producto">
+						</div>
+						<div class="col-lg-6">
+							<input type="text" name="descripcion" id="descripcion" placeholder="Descripcion" disabled="disabled" class="form-control">
+						</div>
+						<div class="col-lg-1">
+							<button type="button" class="btn btn-info" id="buscar"><li class="fas fa-search"></li></button>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-2">
+							Cant:
+						</div>
+						<div class="col-lg-3">
+							<input type="number" name="cantidad" id="cantidad" placeholder="Cantidad" class="form-control">
+						</div>
+						<div class="col-lg-3">
+							<input type="number" name="precio" id="precio" placeholder="Precio" readonly="readonly" class="form-control">
+						</div>
+						<div class="col-lg-3">
+							<input type="number" name="descuento" id="descuento" placeholder="Descuento" class="form-control">
+						</div>
+						<div class="col-lg-1">
+							<button type="button" class="btn btn-danger" id="guardar"><li class="far fa-plus-square"></li></button>
+						</div>
+					</div>
 				</div>
 			</div>
 			<!-- Fin Seccion Superior -->
 			<hr>
 			<!-- Inicio de Detalles -->
 			<div class="row p-1">
-				Detalles
+				<div class="col-lg-12">
+					<table 
+						data-toggle="table" 
+						data-pagination="true" 
+						data-search="true" 
+						data-show-columns="true" 
+						data-show-toggle="true" 
+						data-show-fullscreen="true"
+						data-toolbar=".buttons-toolbar">
+						<thead>
+							<tr>
+								<th data-sortagle="true" data-field="id">Id.</th>
+								<th data-sortagle="true" data-field="codigo">Código</th>
+								<th data-sortagle="true" data-field="descripcion">Descripción</th>
+								<th data-field="cantidad">Cantidad</th>
+								<th data-field="sub_total">Sub - Total</th>
+								<th data-field="descuento">Descuento</th>
+								<th data-field="total">Total</th>
+								<th class="all">Acciónes</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for item in obj %}
+								<tr>
+									<td>{{ item.id }}</td>
+									<td>{{ item.cliente }}</td>
+									<td>{{ item.total }}</td>
+									<td>{{ item.estado | yesno:"Activo,Inactivo" }}</td>
+									<td>
+										<button class="btn btn-warning btn-circle"><li class="far fa-edit"></li></button>
+									</td>
+								</tr>								
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>	
 			</div>
 			<!-- Fin Inicio de Detalles -->
 		</div>
@@ -40,6 +167,83 @@
 
 jQuery(document).ready(function($) {
 	$("#sidebarToggle").click();
+	$("#enc_cliente").select2({
+		placeholder : "Selecione Cliente",
+		allowClear : true
+	});
+	$("#buscar").click(function(e) {
+		if ($("#enc_cliente").val() === "0") {
+			alertify.error("Cliento No Seleionado!!");       
+			return false;
+		}
+		abrir_modal("{% url 'fac:factura_producto' %}");
+	});
+
+	//chequiamos si  precionamos la tecla de enter
+	$("#codigo").keypress(function(e) {
+		if (e.keyCode === 13) {
+			buscarProducto();
+		}
+	});
 });
+
+// Funcion para buscar el producto por el Codigo o por El Codigo de Barra
+function buscarProducto() {
+	//validamos si no esta vacio o es nulo
+	if ($("#enc_cliente").val() === "0" || $("#enc_cliente").val() === null) {
+		alertify.error("Cliento No Seleionado!!");       
+		return false;
+	}
+	var codigo = $("#codigo").val();
+	if (codigo === "") { //validamos sino esta vacio
+		return false;
+	}
+
+	var path = "{% url 'api:producto_list' %}/" + codigo;
+	$.ajax({
+		type: "GET",
+		url: path,
+		success: function(res){
+			console.log(res);
+			console.log(res.existencia);
+			console.log(res.estado);
+
+			if (res.existencia <= 0 || !res.estado) {
+				alertify.warning("Producto No Tiene Existencia o Inactivo!!");
+				$("#codigo").val("");
+				$("#descripcion").val("");
+				$("#precio").val("");
+				return false;  
+			}
+			//Agregamos los datos a los inputs
+			$("#codigo").val(res.codigo);
+			$("#descripcion").val(res.descripcion);
+			$("#precio").val(res.precio);
+			$("#codigo").val(res.codigo);
+
+			$("#cantidad").focus();
+
+		},
+		error: function(jqXHR, textStatus, errorThow){
+			console.log(jqXHR);
+			//console.log(textStatus);
+			//console.log(errorThow);
+			//console.log(jqXHR.status);
+			//console.log(jqXHR.responseText.detail);
+			//jqXHR.responseText["detail"];
+			//alertify.error(errorThow);
+
+			//si da un error mostramos el mensaje y vaciamos los input
+			if (jqXHR.status === 404) {
+				alertify.error("Producto -"+ codigo +"- No Encontrado Ò No Existe");
+				$("#codigo").val("");
+				$("#descripcion").val("");
+				$("#precio").val("0.00");
+				$("#codigo").focus();
+			}
+				
+		}
+	});
+}
 </script>
 {% endblock %}

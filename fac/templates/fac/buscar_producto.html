@@ -1,0 +1,88 @@
+<div class="modal-dialog modal-lg" role="document">
+	<div class="modal-content">
+		<div class="col-xl-12 col-md-12 mb-12">
+			<div class="card border-left-warning shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters aling-items-center">
+						<div class="col-mr-2">
+							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+								Buscar Producto
+							</div>
+							<hr>
+							<div class="row">
+								<table
+									id="table_producto"
+									data-pagination="true" 
+									data-search="true" 
+									data-show-columns="true" 
+									data-show-toggle="true" 
+									data-show-fullscreen="true"
+									data-toolbar=".buttons-toolbar">
+									<thead>
+										<tr>
+											<th data-sortable="true" data-field="id">Id</th>
+											<th data-sortable="true" data-field="codigo">Còdigo</th>
+											<th data-sortable="true" data-field="codigo_barra">Barra</th>
+											<th data-field="descripcion">Descripciòn</th>
+											<th data-field="existencia">Existencia</th>
+											<th data-field="precio">Precio</th>
+											<th class="all">Acciones</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for item in obj %}
+											<tr>
+												<td>{{ item.id }}</td>
+												<td>{{ item.codigo }}</td>
+												<td>{{ item.codigo_barra }}</td>
+												<td>{{ item.descripcion }}</td>
+												<td>{{ item.existencia }}</td>
+												<td>{{ item.precio }}</td>
+												<td>
+													{% if item.existencia > 0 and item.estado %}
+														<button type="button" class="btn btn-warning btn-circle" id="select" onclick="selecionarProducto({{ item.id }}, '{{ item.codigo }}', '{{ item.descripcion }}',{{ item.precio }})"><li class="far fa-hand-pointer"></li></button>
+													{% endif %}
+												</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col">
+									<button type="button" id="cancelar" class="btn btn-warning"> Cancelar</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-auto">
+							<li class="far fa-calendar-plus fa-2x text-gray-300"></li>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>			
+	</div>
+</div>
+
+{% block js %}
+	<script type="text/javascript">
+		$(function(){
+			$("#cancelar").click(function(e){
+				e.preventDefault();
+				cerrar_modal();
+			});
+		});
+
+		$("#table_producto").bootstrapTable();
+
+		function selecionarProducto(id, codigo, descripcion, precio/**/){
+			$("#codigo").val(codigo);
+			$("#descripcion").val(descripcion);
+			$("#precio").val(precio);
+			$("#cancelar").click();
+			$("#codigo").select();
+			$("#codigo").focus();
+		}
+	</script>	
+{% endblock %}
