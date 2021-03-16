@@ -13,10 +13,20 @@ from bases.views import SinPrivilegios
 
 from inv.models import Producto
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import json
 import datetime
 from django.db.models import Sum
+
+"""docstring for MixinFormInvalid"""
+class MixinFormInvalid:
+	def form_invalid(self, form):
+		response = super().form_invalid(form)
+		if self.request.is_ajax():
+			return JsonResponse(form.errors, status=400)
+		else:
+			return response
+
 
 """docstring for ProveedorView"""
 class ProveedorView(LoginRequiredMixin, generic.ListView):
@@ -26,7 +36,7 @@ class ProveedorView(LoginRequiredMixin, generic.ListView):
 	login_url = "bases:login"
 
 """docstring for ProveedorCreate"""
-class ProveedorCreate(LoginRequiredMixin, generic.CreateView):
+class ProveedorCreate(LoginRequiredMixin, MixinFormInvalid, generic.CreateView):
 	model = Proveedor
 	template_name = "cmp/proveedor_form.html"
 	context_object_name = "obj"
@@ -40,7 +50,7 @@ class ProveedorCreate(LoginRequiredMixin, generic.CreateView):
 		return super().form_valid(form)
 
 """docstring for ProveedorUpdateView"""
-class ProveedorUpdateView(LoginRequiredMixin, generic.UpdateView):
+class ProveedorUpdateView(LoginRequiredMixin, MixinFormInvalid, generic.UpdateView):
 	model = Proveedor
 	template_name = "cmp/proveedor_form.html"
 	context_object_name = "obj"

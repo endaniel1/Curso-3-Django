@@ -14,7 +14,7 @@ from django.contrib.messages.views import SuccessMessageMixin #para los mensajes
 from bases.views import SinPrivilegios
 
 """docstring for CategoriaView"""
-class CategoriaView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
+class CategoriaView(SinPrivilegios, generic.ListView):
 	permission_required = "inv.view_categoria"
 	model = Categoria
 	template_name = "inv/categoria_list.html"
@@ -60,7 +60,7 @@ class CategoriaDeleteView(LoginRequiredMixin, generic.DeleteView):
 	success_url = reverse_lazy("inv:categoria_list")
 
 """docstring for SubCategoriaView"""
-class SubCategoriaView(LoginRequiredMixin, SinPrivilegios, generic.ListView):
+class SubCategoriaView(SinPrivilegios, generic.ListView):
 	permission_required = "inv.view_subcategoria"
 	model = SubCategoria
 	template_name = "inv/subcategoria_list.html"
@@ -105,7 +105,7 @@ class SubCategoriaDeleteView(LoginRequiredMixin, generic.DeleteView):
 	success_url = reverse_lazy("inv:subcategoria_list")
 
 """docstring for MarcaView"""
-class MarcaView(LoginRequiredMixin, SinPrivilegios, generic.ListView):
+class MarcaView(SinPrivilegios, generic.ListView):
 	permission_required = "inv.view_marca" #este metodo aqui q colocarlo porque lo tiene heredado de la class SinPrivilegios
 	model = Marca
 	template_name = "inv/marcas_list.html"

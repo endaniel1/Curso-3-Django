@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin #Aqui importamos un mixis
 from django.views import generic
 
 """Class for SinPrivilegios"""
-class SinPrivilegios(PermissionRequiredMixin):
+class SinPrivilegios(LoginRequiredMixin, PermissionRequiredMixin):
+	login_url = "bases:login"
 	raise_exception =  False #Estao para q no se ponga la pantalla en blanco o no marque el error
 	redirect_field_name = "redirecto_to" #aqui para qu acepte redireciones
 
