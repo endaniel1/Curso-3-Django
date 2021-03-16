@@ -1,164 +1,184 @@
 {% extends "base/base.html" %}
 
 {% block content %}
-
-<div class="card shadow mb-4">
-	<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-		<a href="#" class="btn btn-danger" title="Guardar">Guardar</a>
-		<a href="#" class="btn btn-success" title="Imprimir">Imprimir</a>
-		<a href="{% url 'fac:factura_list' %}" class="btn btn-info" title="Cancelar">Cancelar</a>		
-	</div>
-	<div class="card-body">
-		<div class="content">
-			<!-- Seccion Superior -->
-			<div class="row">
-				<!-- Seccion Izquierda -->
-				<div class="col-lg-6">
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="row">
-								<div class="col-lg-1">
-									No.
-								</div>
-								<div class="col-lg-4">
-									<input type="text" name="enc_id" id="enc_id" readonly="readonly" class="form-control">
-								</div>
-								<div class="col-lg-2">
-									Cliente
-								</div>
-								<div class="col-lg-5 form-group">
-									<select name="enc_cliente" id="enc_cliente" class="form-control">
-										<option value="0"> Selecione Cliente</option>
-										{% for cliente in clientes %}
-											<option value="{{ cliente.id }}">{{ cliente.nombres }} {{ cliente.apellidos }}</option>
-										{% endfor %}
-									</select>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-lg-12 p-2">
-									<div class="row">
-										<div class="col-lg-6">
-											fecha:
-										</div>	
-										<div class="col-lg-6">	
-											Sub - Total:
-										</div>	
-									</div>
-									<div class="row">
-										<div class="col-lg-6">
-											<input type="text" name="fecha" id="fecha" value="{{ enc.fecha | date:"Y-m-d" }}" readonly="readonly" class="form-control form-control-user">
-										</div>	
-										<div class="col-lg-6">	
-											<input type="number" class="form-control text-right" value="0.00" readonly="readonly" name="sub_total" id="sub_total">
-										</div>	
-									</div>
-									<div class="row">
-										<div class="col-lg-12 text-right">
-											Descuento:
-										</div>
-										<div class="col-lg-6 text-right">
-										</div>
-										<div class="col-lg-6 text-right">
-											<input type="number" name="descuento" id="descuento" disabled="disabled" value="0.00" class="form-control text-right">
-										</div>
-										<div class="col-lg-12 text-right">
-											Total:
-										</div>
-										<div class="col-lg-6 text-right">
-										</div>
-										<div class="col-lg-6 text-right">
-											<input type="number" name="total" id="total" disabled="disabled" value="0.00" class="form-control text-right">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>		
-				</div>
-				<!-- Seccion Derecha -->
-				<div class="col-lg-6 form-group">
-					<div class="row p-2">
-						<div class="col-lg-2">
-							Cod:
-						</div>
-						<div class="col-lg-3">
-							<input type="text" class="form-control" name="codigo" id="codigo" placeholder="Cod. Producto">
-						</div>
-						<div class="col-lg-6">
-							<input type="text" name="descripcion" id="descripcion" placeholder="Descripcion" disabled="disabled" class="form-control">
-						</div>
-						<div class="col-lg-1">
-							<button type="button" class="btn btn-info" id="buscar"><li class="fas fa-search"></li></button>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-lg-2">
-							Cant:
-						</div>
-						<div class="col-lg-3">
-							<input type="number" name="cantidad" id="cantidad" placeholder="Cantidad" class="form-control">
-						</div>
-						<div class="col-lg-3">
-							<input type="number" name="precio" id="precio" placeholder="Precio" readonly="readonly" class="form-control">
-						</div>
-						<div class="col-lg-3">
-							<input type="number" name="descuento" id="descuento" placeholder="Descuento" class="form-control">
-						</div>
-						<div class="col-lg-1">
-							<button type="button" class="btn btn-danger" id="guardar"><li class="far fa-plus-square"></li></button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Fin Seccion Superior -->
-			<hr>
-			<!-- Inicio de Detalles -->
-			<div class="row p-1">
-				<div class="col-lg-12">
-					<table 
-						data-toggle="table" 
-						data-pagination="true" 
-						data-search="true" 
-						data-show-columns="true" 
-						data-show-toggle="true" 
-						data-show-fullscreen="true"
-						data-toolbar=".buttons-toolbar">
-						<thead>
-							<tr>
-								<th data-sortagle="true" data-field="id">Id.</th>
-								<th data-sortagle="true" data-field="codigo">Código</th>
-								<th data-sortagle="true" data-field="descripcion">Descripción</th>
-								<th data-field="cantidad">Cantidad</th>
-								<th data-field="sub_total">Sub - Total</th>
-								<th data-field="descuento">Descuento</th>
-								<th data-field="total">Total</th>
-								<th class="all">Acciónes</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for item in obj %}
-								<tr>
-									<td>{{ item.id }}</td>
-									<td>{{ item.cliente }}</td>
-									<td>{{ item.total }}</td>
-									<td>{{ item.estado | yesno:"Activo,Inactivo" }}</td>
-									<td>
-										<button class="btn btn-warning btn-circle"><li class="far fa-edit"></li></button>
-									</td>
-								</tr>								
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>	
-			</div>
-			<!-- Fin Inicio de Detalles -->
+<form method="post">
+	{% csrf_token %}
+	<div class="card shadow mb-4">
+		<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+			<a href="#" class="btn btn-danger" title="Guardar">Guardar</a>
+			<a href="{% url 'fac:factura_imprimir1' enc.id %}" class="btn btn-success" title="Imprimir" target="__factura">Imprimir</a>
+			<a href="{% url 'fac:factura_list' %}" class="btn btn-info" title="Cancelar">Cancelar</a>		
 		</div>
-	</div>
-</div>
-	
+		<div class="card-body">
+			<div class="content">
+				<!-- Seccion Superior -->
+				<div class="row">
+					<!-- Seccion Izquierda -->
+					<div class="col-lg-6">
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="row">
+									<div class="col-lg-1">
+										No.
+									</div>
+									<div class="col-lg-4">
+										<input type="text" name="enc_id" id="enc_id" readonly="readonly" class="form-control">
+									</div>
+									<div class="col-lg-2">
+										Cliente
+									</div>
+									<div class="col-lg-5 form-group">
+										<select name="enc_cliente" id="enc_cliente" class="form-control">
+											<option value="0"> Selecione Cliente</option>
+											{% for cliente in clientes %}
+												<option value="{{ cliente.id }}">{{ cliente.nombres }} {{ cliente.apellidos }}</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-lg-12 p-2">
+										<div class="row">
+											<div class="col-lg-6">
+												fecha:
+											</div>	
+											<div class="col-lg-6">	
+												Sub - Total:
+											</div>	
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<input type="text" name="fecha" id="fecha" value="{{ enc.fecha | date:"Y-m-d" }}" readonly="readonly" class="form-control form-control-user">
+											</div>	
+											<div class="col-lg-6">	
+												<input type="number" class="form-control text-right" value="0.00" readonly="readonly" name="sub_total" id="sub_total">
+											</div>	
+										</div>
+										<div class="row">
+											<div class="col-lg-12 text-right">
+												Descuento:
+											</div>
+											<div class="col-lg-6 text-right">
+											</div>
+											<div class="col-lg-6 text-right">
+												<input type="number" name="descuento" id="descuento" disabled="disabled" value="0.00" class="form-control text-right">
+											</div>
+											<div class="col-lg-12 text-right">
+												Total:
+											</div>
+											<div class="col-lg-6 text-right">
+											</div>
+											<div class="col-lg-6 text-right">
+												<input type="number" name="total" id="total" disabled="disabled" value="0.00" class="form-control text-right">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>		
+					</div>
+					<!-- Seccion Derecha -->
+					<div class="col-lg-6 form-group">
+						<div class="row p-2">
+							<div class="col-lg-2">
+								Cod:
+							</div>
+							<div class="col-lg-3">
+								<input type="text" class="form-control" name="codigo" id="codigo" placeholder="Cod. Producto">
+							</div>
+							<div class="col-lg-6">
+								<input type="text" name="descripcion" id="descripcion" placeholder="Descripcion" disabled="disabled" class="form-control">
+							</div>
+							<div class="col-lg-1">
+								<button type="button" class="btn btn-info" id="buscar"><li class="fas fa-search"></li></button>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-lg-2">
+								Cant:
+							</div>
+							<div class="col-lg-3">
+								<input type="number" name="cantidad" id="cantidad" placeholder="Cantidad" class="form-control">
+							</div>
+							<div class="col-lg-3">
+								<input type="number" name="precio" id="precio" placeholder="Precio" readonly="readonly" class="form-control">
+							</div>
+							<div class="col-lg-3">
+								<input type="number" name="descuento_detalle" id="descuento_detalle" placeholder="Descuento" class="form-control">
+							</div>
+							<div class="col-lg-1">
+								<button type="submit" class="btn btn-danger" id="guardar"><li class="far fa-plus-square"></li></button>
+							</div>
+						</div>
+						<div class="row p-1">
+							<div class="col-lg-9 text-right">
+								Sub - Total
+							</div>
+							<div class="col-lg-3">
+								<input type="number" name="sub_total_detalle" id="sub_total_detalle" class="form-control" placeholder="Sub Total" value="0.00" disabled="disabled">
+							</div>
+						</div>
+						<div class="row p-1">
+							<div class="col-lg-9 text-right">
+								Total
+							</div>
+							<div class="col-lg-3">
+								<input type="number" name="total_detalle" id="total_detalle" class="form-control" placeholder="Total" value="0.00" disabled="disabled">
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Fin Seccion Superior -->
+				<hr>
+				<!-- Inicio de Detalles -->
+				<div class="row p-1">
+					<div class="col-lg-12">
+						<table 
+							data-toggle="table" 
+							data-pagination="true" 
+							data-search="true" 
+							data-show-columns="true" 
+							data-show-toggle="true" 
+							data-show-fullscreen="true"
+							data-toolbar=".buttons-toolbar">
+							<thead>
+								<tr>
+									<th data-sortagle="true" data-field="id">Id.</th>
+									<th data-sortagle="true" data-field="codigo">Código</th>
+									<th data-sortagle="true" data-field="descripcion">Descripción</th>
+									<th data-field="cantidad">Cantidad</th>
+									<th data-field="sub_total">Sub - Total</th>
+									<th data-field="descuento">Descuento</th>
+									<th data-field="total">Total</th>
+									<th class="all">Acciónes</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for item in obj %}
+									<tr>
+										<td>{{ item.id }}</td>
+										<td>{{ item.producto }}</td>
+										<td>{{ item.producto.descripcion }}</td>
+										<td>{{ item.cantidad }}</td>
+										<td>{{ item.sub_total }}</td>
+										<td>{{ item.descuento }}</td>
+										<td>{{ item.total }}</td>
+										<td>
+											<button type="button" class="btn btn-warning btn-circle" onclick="viewBorrarDetalle({{item.id}})"><li class="fas fa-history"></li></button>
+										</td>
+									</tr>								
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>	
+				</div>
+				<!-- Fin Inicio de Detalles -->
+			</div>
+		</div>
+	</div>	
+</form>
 {% endblock %}
 
 
@@ -182,9 +202,20 @@ jQuery(document).ready(function($) {
 	//chequiamos si  precionamos la tecla de enter
 	$("#codigo").keypress(function(e) {
 		if (e.keyCode === 13) {
+			e.preventDefault();
 			buscarProducto();
 		}
 	});
+
+	$("#cantidad, #precio, #descuento_detalle").change(function(e) {
+		calcularDetalle();
+	});
+	$("#enc_id").val("{{ enc.id }}");
+	$("#enc_cliente").val("{{ enc.cliente }}").change();
+	$("#fecha").val("{{ enc.fecha | date:'Y-m-d' }}");
+	$("#sub_total").val("{{ enc.sub_total }}");
+	$("#descuento").val("{{ enc.descuento }}");
+	$("#descuento_detalle").val("{{ enc.total }}");
 });
 
 // Funcion para buscar el producto por el Codigo o por El Codigo de Barra
@@ -245,5 +276,45 @@ function buscarProducto() {
 		}
 	});
 }
+function calcularDetalle() {
+	var cantidad, precio, descuento, subTotal, total;
+
+	cantidad = $("#cantidad").val();
+	cantidad = cantidad === "" ? 0 : +cantidad;
+	cantidad = cantidad < 0 ? 0 : cantidad;
+
+	precio = $("#precio").val();
+	precio = precio === "" ? 0 : +precio;
+	precio = precio < 0 ? 0 : precio;
+
+	descuento = $("#descuento_detalle").val();
+	descuento = descuento === "" ? 0 : +descuento;
+	descuento = descuento < 0 ? 0 : descuento;
+
+	descuento = descuento  > (cantidad * precio) ? 0 : descuento;
+
+	subTotal = cantidad * precio;
+	total = subTotal - descuento;
+
+	$("#cantidad").val(cantidad);
+	$("#precio").val(precio);
+	$("#descuento_detalle").val(descuento);
+	$("#sub_total_detalle").val(subTotal);
+	$("#total_detalle").val(total);
+
+	console.log("Cantidad "+ cantidad);
+	console.log("Precio "+ precio);
+	console.log("descuento "+ descuento);
+
+	console.log("Sub total detalle "+ subTotal);
+	console.log("Total detalle "+ total);
+}
+
+function viewBorrarDetalle(id) {
+	var url = "/fac/facturas/borrar_detalle/"+ id;
+	//console.log(url);
+	abrir_modal(url);
+}
+
 </script>
 {% endblock %}

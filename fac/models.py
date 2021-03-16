@@ -2,6 +2,11 @@ from django.db import models
 from bases.models import ClassModelo, ClassModelo2
 from inv.models import Producto
 
+#Para Utilizacion de Signals
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from django.db.models import Sum
+
 # Create your models here.
 
 """docstring for Cliente"""
@@ -37,7 +42,7 @@ class Cliente(ClassModelo):
 		verbose_name = 'Clientes'
 
 class FacturaEnc(ClassModelo2):
-	Cliente = models.ForeignKey(Cliente, on_delete = models.CASCADE)
+	cliente = models.ForeignKey(Cliente, on_delete = models.CASCADE)
 	fecha = models.DateTimeField(auto_now_add = True)
 	sub_total = models.FloatField(default = 0)
 	descuento = models.FloatField(default = 0)
@@ -48,11 +53,14 @@ class FacturaEnc(ClassModelo2):
 
 	def save(self):
 		self.total = self.sub_total - self.descuento
-		super(FacturaDet, self).save()
+		super(FacturaEnc, self).save()
 
 	class Meta:
 		verbose_name_plural = "Encabezado de Facturas"
 		verbose_name = "Encabezado Factura"
+		permissions = [
+			("sup_caja_facturaenc", "Permisos de Supervisor de Caja Encabezado")
+		]
 
 class FacturaDet(ClassModelo2):
 	factura = models.ForeignKey(FacturaEnc, on_delete = models.CASCADE)
@@ -74,3 +82,28 @@ class FacturaDet(ClassModelo2):
 	class Meta:
 		verbose_name_plural = "Detalles de Facturas"
 		verbose_name = "Detalle Factura"
+		permissions = [
+			("sup_caja_facturadet", "Permisos de Supervisor de Caja Detalle")
+		]
+
+@receiver(post_save, sender = FacturaDet)
+def detalleFacSave(sender, instance, **kwargs):
+	factura_id = instance.factura.id
+	producto_id = instance.producto.id
+
+	encabezado = FacturaEnc.objects.get(pk = factura_id)
+
+	if encabezado:
+		sub_total = FacturaDet.objects.filter(factura = factura_id).aggregate(sub_total = Sum("sub_total")).get("sub_total", 0.00)
+
+		descuento = FacturaDet.objects.filter(factura = factura_id).aggregate(sub_total = Sum("descuento")).get("descuento", 0.00)
+
+		encabezado.sub_total = sub_total
+		encabezado.descuento = descuento
+		encabezado.save()
+
+	prod = Producto.objects.filter(pk = producto_id).first()
+	if prod:
+		cantidad = int(prod.existencia) - int(instance.cantidad)
+		prod.existencia = cantidad
+		prod.save()

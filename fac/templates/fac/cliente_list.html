@@ -14,7 +14,9 @@
 	</div>
 </div>
 <div class="card-body">
-	{% if not obj %}
+	<div class="buttons-toolbar text-right"><a class="dropdown-item" href="#" onclick="return abrir_modal('{% url 'fac:cliente_create' %}')"><li class="fas fa-plus"></li> Crear Nueva</a>
+	</div>
+	{% if not obj %}	
 		<div class="alert alert-info">
 			No ay Clientes
 		</div>
@@ -64,8 +66,6 @@
 			</tbody>
 		</table>			
 		{% endcomment %}
- 		<div class="buttons-toolbar"><a class="dropdown-item" href="#" onclick="return abrir_modal('{% url 'fac:cliente_create' %}')"><li class="fas fa-plus"></li> Crear Nueva</a>
- 		</div>
 		<table 
 			data-toggle="table" 
 			data-pagination="true" 

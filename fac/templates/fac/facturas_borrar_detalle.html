@@ -1,0 +1,58 @@
+<div class="modal-dialog modal-sm" role="document">
+  <div class="modal-content text-center">
+    <div class="modal-header">
+      <h4 class="modal-title" id="title_modal">
+        Confirmaciòn Requerida!
+      </h4>
+    </div>
+    <div class="modal-body" id="body-modal">
+      <label class="text-danger">¿Anular Producto <b>{{det.producto.descripcion}}</b>, Factura <b>{{det.factura.id}}</b>?</label>     
+      <div class="form-group">
+        <label for="usuario" class="control label">Usuario:</label>
+        <input type="text" id="usuario" class="form-control" required="required" value="{{ user.username }}">
+      </div>
+      <div class="form-group">
+        <label for="password" class="control label">Contraseña:</label>
+        <input type="password" id="password" class="form-control" required="required" value="">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" id="borrar"><span class="far fa-trash-alt"></span> Borrar</button>
+      <button class="btn btn-success" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fas fa-times"></span> Cancelar</button>
+    </div>
+  </div><!-- /.modal-content -->    
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+  $(document).ready(function(e) {
+    $("#borrar").click(function(e){
+      e.preventDefault();
+      var url = "{% url 'fac:factura_delete' id %}";
+      var token = "{{ csrf_token }}";
+      var data = {
+        "usuario":$("#usuario").val(),
+        "password":$("#password").val()
+      };
+      //data = JSON.stringify(data);
+      console.log(data);
+
+      $.ajax({
+        headers : {"X-CSRFToken": token},
+        type : "POST",
+        url : url,
+        data : data,
+        success : function(resp){
+          if (resp === "OK") {      
+            location.reload(true);  
+          } else{
+            alertify.error(resp);
+          }
+        },
+        error: function(jqXHR, textStatus, errorThow){
+          alertify.error(errorThow);
+          cerrar_modal();
+        }
+      });
+    });
+  });
+</script>

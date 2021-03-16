@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Listado de Compras</title>
+	<link rel="stylesheet" href="{% static 'base/css/recibo.css' %}">
+	<style type="text/css">
+		@page {
+			width: 58mm;
+			size:auto;
+			margin: 0mm;
+		}
+	</style>
+</head>
+<body onload="window.print(); setTimeout(function(){
+window.close();
+},2000);" onfocus="" class="receipt">
+	<div class="col-md-1 col-sm-1 col-xs-1 col-xl-1">
+		<center>
+			<b class="text-center">Tienda Curso Django</b>
+			<small>Direcciòn</small>
+			<small>FACTURA DE {{ enc.factura }}</small>
+		</center>
+		<br>
+		<br>
+		<small>
+			<b>Factura No.:</b>&nbsp;&nbsp;{{enc.id}}&nbsp;&nbsp;
+			<b>Fecha Fact.:</b>&nbsp;&nbsp;{{enc.fecha}}&nbsp;&nbsp;
+			<b>Cliente:</b>&nbsp;&nbsp;{{enc.cliente.id}}&nbsp;&nbsp; - {{ enc.cliente }}
+		</small>
+		<br>
+		<br>
+		<br>
+		<table class="table table-condensed table-sm" width="60%">
+			<thead>
+				<tr>
+					<th>Còdigo</th>
+					<th align="right">Cant.</th>
+					<th align="right">P. Unit.</th>
+					<th align="right">Sub Total</th>
+					<th align="right">Descuento</th>
+					<th align="right">Total</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for obj in detalle %}					
+				<tr>
+					<td>{{ obj.producto.id }}</td>
+					<td>{{ obj.cantidad }}</td>
+					<td>{{ obj.precio }}</td>
+					<td>{{ obj.sub_total }}</td>
+					<td>{{ obj.descuento }}</td>
+					<td>{{ obj.total }}</td>
+				</tr>
+				<tr>
+					<td colspan="5">{{ obj.producto }}</td>
+				</tr> 
+				{% endfor %}
+			</tbody>
+		</table>
+		<div class="col-xs-1"></div>
+		<div class="col-xs-1">
+			<div class="pull-right">
+				<table class="table-responsive dt-responsive nowrap">
+					<thead>
+						<tr>
+							<th colspan="2">Totales</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Sub Total:</td>
+							<td align="right">{{ encabezado.sub_total }}</td>
+						</tr>
+						<tr>
+							<td>Iva:</td>
+							<td align="right">{{ encabezado.descuento }}</td>
+						</tr>
+						<tr>
+							<td>Total</td>
+							<td align="right">{{ encabezado.total }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="row">
+			<br>
+			<br>
+			<small class="pie">
+				<center>
+					Creado por: {{ encabezado.uc }} - Fecha {{ encabezado.fc }}
+					<br>
+					<li>&copy; &reg; <b>Enrique Rodriguez</b> <br> - enriq_1997@hotmail.com</li>
+				</center>
+			</small>
+		</div>
+	</div>
+</body>
+</html>

@@ -16,6 +16,19 @@
 	{% endcomment %}
 </div>
 <div class="card-body">
+
+	<div class="row">
+		<div class="col-md-3">
+			<input type="text" name="fecha1" class="form-control" id="fecha1" readonly="readonly">
+		</div>
+		<div class="col-md-3">
+			<input type="text" name="fecha2" class="form-control" id="fecha2" readonly="readonly">
+		</div>
+		<div class="col-md-6">
+			<button class="btn btn-warning" type="button" id="imprimir">Imprimir</button>
+		</div>
+	</div>
+
 	{% if not obj %}
 		<div class="alert alert-info">
 			No ay Facturas
@@ -54,7 +67,7 @@
 					<td>{{factura.total}}</td>
 					<td>{{factura.estado | yesno:'Activo,Inactivo'}}</td>
 					<td>
-						<a href="#" title="Editar" class="btn btn-warning btn-circle" role="button"><li class="far fa-edit"></li></a>
+						<a href="{% url 'fac:factura_edit' factura.id %}" title="Editar" class="btn btn-warning btn-circle" role="button"><li class="far fa-edit"></li></a>
 						{% if factura.estado %}	
 
 							<button type="button" title="Eliminar" class="btn btn-danger btn-circle"><li class="far fa-trash-alt"></li></button>
@@ -73,7 +86,6 @@
 
 {% block  js %}
 <script type="text/javascript">
-
 /*
 function inactivar(id){
 	var data = {id : id};
@@ -100,5 +112,31 @@ function inactivar(id){
 	});
 }
 */
+
+jQuery(document).ready(function($) {
+	$("#fecha1, #fecha2").datetimepicker({
+		format: "Y-m-d",
+		timepicker: false
+	});
+	$("#imprimir").click(function(event) {
+		event.preventDefault();
+		var f1, f2;
+		f1 = $("#fecha1").val();
+		f2 = $("#fecha2").val();
+		if (f1 == "" || f1 == null) {
+			f1 = "2021-03-02";
+		}
+		if (f2 == "" || f2 == null) {
+			var d = new Date();
+			var f2 = d.getFullYear() + "-"+ (d.getMonth() + 1) +"-"+ d.getDay();
+		}
+
+		var url = "imprimir_all/"+ f1 +"/"+ f2;
+
+		//alert(url);
+
+		window.open(url, "facturas");
+	});
+});
 </script>
 {% endblock %}
