@@ -235,6 +235,12 @@ class ProductoCreate(LoginRequiredMixin, generic.CreateView):
 		form.instance.uc = self.request.user
 		return super().form_valid(form)
 
+	def get_context_data(self, **kwargs):
+		context = super(ProductoCreate, self).get_context_data(**kwargs)
+		context["categorias"] = Categoria.objects.all()
+		context["sub_categorias"] = SubCategoria.objects.all()
+		return context
+
 """docstring for ProductoUpdateView"""
 class ProductoUpdateView(LoginRequiredMixin, generic.UpdateView):
 	model = Producto
@@ -248,6 +254,16 @@ class ProductoUpdateView(LoginRequiredMixin, generic.UpdateView):
 	def form_valid(self, form):
 		form.instance.um = self.request.user.id
 		return super().form_valid(form)
+
+	def get_context_data(self, **kwargs):
+		pk = self.kwargs.get("pk")
+
+		context = super(ProductoUpdateView, self).get_context_data(**kwargs)
+		context["categorias"] = Categoria.objects.all()
+		context["sub_categorias"] = SubCategoria.objects.all()
+		context["obj"] = Producto.objects.filter(pk=pk).first()
+
+		return context
 
 def producto_inactivar(request, id):
 	producto = Producto.objects.filter(pk=id).first()

@@ -88,6 +88,7 @@ class Producto(ClassModelo):
 
 	marca = models.ForeignKey(Marca, on_delete= models.CASCADE)
 	unidad_medida = models.ForeignKey(UnidadMedida, on_delete = models.CASCADE)
+	categoria = models.ForeignKey(Categoria, on_delete = models.CASCADE)
 	sub_categoria = models.ForeignKey(SubCategoria, on_delete = models.CASCADE)
 
 	def __str__(self):

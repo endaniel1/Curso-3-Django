@@ -24,8 +24,104 @@
 							</div>
 							<hr class="sidebar-divider">
 							<div class="row">						
-								{{ form.as_p }}
+								{# {{ form.as_p }} #}
 							</div>
+							{% comment %}
+								
+							{% endcomment %}
+							<div class="row">
+								<div class="col-md-4">
+									{{ form.codigo.label }}
+								</div>
+								<div class="col-md-4">
+									{{ form.codigo_barra.label }}
+								</div>
+								<div class="col-md-4">
+									{{ form.descripcion.label }}
+								</div>
+							</div>		
+							<div class="row">
+								<div class="col-md-4">					
+									{{ form.codigo }}
+								</div>
+								<div class="col-md-4">					
+									{{ form.codigo_barra }}
+								</div>
+								<div class="col-md-4">	
+									{{ form.descripcion }}
+								</div>
+							</div>		
+							<div class="row">
+								<div class="col-md-4">
+									{{ form.estado.label }}
+								</div>
+								<div class="col-md-4">
+									{{ form.precio.label }}
+								</div>
+								<div class="col-md-4">
+									{{ form.existencia.label }}
+								</div>									
+							</div>	
+							<div class="row">
+								<div class="col-md-4">	
+									{{ form.estado }}
+								</div>
+								<div class="col-md-4">	
+									{{ form.precio }}
+								</div>
+								<div class="col-md-4">
+									{{ form.existencia }}
+								</div>									
+							</div>	
+							<div class="row">
+								<div class="col-md-4">
+									{{ form.ultima_compra.label }}
+								</div>
+								<div class="col-md-4">
+									{{ form.marca.label }}
+								</div>
+								<div class="col-md-4">
+									{{ form.unidad_medida.label }}
+								</div>
+							</div>	
+							<div class="row">								
+								<div class="col-md-4">					
+									{{ form.ultima_compra }}
+								</div>
+								<div class="col-md-4">					
+									{{ form.marca }}
+								</div>
+								<div class="col-md-4">					
+									{{ form.unidad_medida }}
+								</div>
+							</div>								
+							<div class="row">								
+								<div class="col-md-6">			
+									Categoria
+								</div>
+								<div class="col-md-6">	
+									Sub - Categoria
+								</div>
+							</div>	
+							<div class="row">								
+								<div class="col-md-6">			
+									<select name="categoria" id="categoria_id" class="form-control">
+										<option value="">-----------</option>
+										{% for item in categorias %}
+											<option value="{{ item.id }}">{{ item.descripcion }}</option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="col-md-6">	
+									<select name="sub_categoria" id="sub_categoria_id" class="form-control">
+										<option value="">-----------</option>
+										{% for item in sub_categorias %}
+											<option value="{{ item.id }}" data-chained="{{ item.categoria.id }}">{{ item.descripcion }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+
 							<hr class="sidebar-divider">
 							<div class="row text-center">
 								<div class="col">
@@ -40,3 +136,10 @@
 		</form>
 	</div>
 </div>
+<script type="text/javascript">
+	jQuery(document).ready(function($) {		
+		$("#categoria_id").val("{{ obj.sub_categoria.categoria.id }}").change();
+		$("#sub_categoria_id").val("{{ obj.sub_categoria.id }}").change();
+		$("#sub_categoria_id").chained("#categoria_id");
+	});
+</script>

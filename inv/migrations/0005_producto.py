@@ -28,6 +28,7 @@ class Migration(migrations.Migration):
                 ('existencia', models.IntegerField(default=0)),
                 ('ultima_compra', models.DateField(blank=True, null=True)),
                 ('marca', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inv.Marca')),
+                ('categoria', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inv.Categoria')),
                 ('sub_categoria', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inv.SubCategoria')),
                 ('uc', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('unidad_medida', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inv.UnidadMedida')),

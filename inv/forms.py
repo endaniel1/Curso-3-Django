@@ -113,6 +113,7 @@ class ProductoForm(forms.ModelForm):
 			"existencia", 
 			"ultima_compra", 
 			"marca", 
+			"categoria", 
 			"sub_categoria", 
 			"unidad_medida"
 		]
