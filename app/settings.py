@@ -60,7 +60,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "django_userforeignkey.middleware.UserForeignKeyMiddleware", #Para utilizar lo de las llaves Foraneas
-    "whitenoise.middleware.WhiteNoiseMiddleware"
+    "whitenoise.middleware.WhiteNoiseMiddleware", #Para la utilizacion de whitenoise
 ]
 
 ROOT_URLCONF = 'app.urls' #Carpeta de donde estan la configuracion del manego de rutas
@@ -141,5 +141,6 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 LOGIN_REDIRECT_URL = '/' #decimos aqui q la ruta a ir para el login sea esta
 LOGOUT_URL = '/login '#decimos aqui q cuando se haga logout va al login
 
+#Para modificar la configuracion de la BD para heroku
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES["default"].update(db_from_env)
